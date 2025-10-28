@@ -118,9 +118,6 @@ const Index = () => {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <Badge variant="outline" className="text-lg px-6 py-2 border-white text-white">
-                Сезон 2025
-              </Badge>
               <Button variant="default" onClick={() => setShowAdmin(true)} className="bg-white text-secondary hover:bg-gray-100">
                 <Icon name="Settings" className="mr-2" size={20} />
                 Админ-Панель
