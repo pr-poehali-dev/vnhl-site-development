@@ -11,6 +11,8 @@ import PlayoffsTab from '@/components/PlayoffsTab';
 import ChampionTab from '@/components/ChampionTab';
 import RulesTab from '@/components/RulesTab';
 import { isAuthenticated } from '@/lib/auth';
+import { useTheme } from '@/contexts/ThemeContext';
+import ThemeToggle from '@/components/ThemeToggle';
 import {
   initialTeams,
   initialMatches,
@@ -135,6 +137,7 @@ const Index = () => {
               </div>
             </div>
             <div className="flex items-center gap-4">
+              <ThemeToggle />
               <Button variant="default" onClick={() => setShowAdmin(true)} className="bg-white text-secondary hover:bg-gray-100">
                 <Icon name="Settings" className="mr-2" size={20} />
                 Админ-Панель
