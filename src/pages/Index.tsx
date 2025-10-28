@@ -235,7 +235,7 @@ const Index = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {teams.filter((team: any) => team.conference === 'Восточная').map((team: any, idx: number) => (
+                          {teams?.filter((team: any) => team.conference === 'Восточная').map((team: any, idx: number) => (
                             <tr
                               key={team.id}
                               className={`border-b hover:bg-muted/50 transition-colors ${
@@ -281,7 +281,7 @@ const Index = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {teams.filter((team: any) => team.conference === 'Западная').map((team: any, idx: number) => (
+                          {teams?.filter((team: any) => team.conference === 'Западная').map((team: any, idx: number) => (
                             <tr
                               key={team.id}
                               className={`border-b hover:bg-muted/50 transition-colors ${
@@ -324,7 +324,7 @@ const Index = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {matches.map((match: any) => (
+                  {matches?.map((match: any) => (
                     <Card key={match.id} className="hover:shadow-lg transition-shadow">
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between">
@@ -379,7 +379,7 @@ const Index = () => {
                   <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                     <div className="space-y-4">
                       <h3 className="text-xl font-oswald text-center mb-6">1/8 финала</h3>
-                      {playoffBracket.roundOf16.map((match: any) => (
+                      {playoffBracket?.roundOf16?.map((match: any) => (
                         <Card key={match.id} className="bg-secondary/5">
                           <CardContent className="p-3">
                             <div className="space-y-2">
@@ -399,7 +399,7 @@ const Index = () => {
 
                     <div className="space-y-4">
                       <h3 className="text-xl font-oswald text-center mb-6">1/4 финала</h3>
-                      {playoffBracket.quarterFinals.map((match: any) => (
+                      {playoffBracket?.quarterFinals?.map((match: any) => (
                         <Card key={match.id} className="bg-secondary/5 mt-8">
                           <CardContent className="p-4">
                             <div className="space-y-2">
@@ -419,7 +419,7 @@ const Index = () => {
 
                     <div className="space-y-4">
                       <h3 className="text-xl font-oswald text-center mb-6">1/2 финала</h3>
-                      {playoffBracket.semiFinals.map((match: any) => (
+                      {playoffBracket?.semiFinals?.map((match: any) => (
                         <Card key={match.id} className="bg-secondary/5 mt-24">
                           <CardContent className="p-4">
                             <div className="space-y-2">
@@ -443,12 +443,12 @@ const Index = () => {
                         <CardContent className="p-6">
                           <div className="space-y-3">
                             <div className="flex justify-between items-center">
-                              <span className="font-semibold text-lg">{playoffBracket.final.team1}</span>
-                              <Badge className="text-lg px-3 py-1">{playoffBracket.final.score1 ?? '—'}</Badge>
+                              <span className="font-semibold text-lg">{playoffBracket?.final?.team1}</span>
+                              <Badge className="text-lg px-3 py-1">{playoffBracket?.final?.score1 ?? '—'}</Badge>
                             </div>
                             <div className="flex justify-between items-center">
-                              <span className="font-semibold text-lg">{playoffBracket.final.team2}</span>
-                              <Badge className="text-lg px-3 py-1">{playoffBracket.final.score2 ?? '—'}</Badge>
+                              <span className="font-semibold text-lg">{playoffBracket?.final?.team2}</span>
+                              <Badge className="text-lg px-3 py-1">{playoffBracket?.final?.score2 ?? '—'}</Badge>
                             </div>
                           </div>
                         </CardContent>
@@ -463,26 +463,26 @@ const Index = () => {
                   <div className="flex justify-center mb-4">
                     <Icon name="Trophy" size={64} className="text-primary" />
                   </div>
-                  <CardTitle className="text-4xl font-oswald">Чемпион сезона {champion.season}</CardTitle>
+                  <CardTitle className="text-4xl font-oswald">Чемпион сезона {champion?.season}</CardTitle>
                 </CardHeader>
                 <CardContent className="text-center">
                   <div className="space-y-6">
-                    <div className="text-7xl">{champion.logo}</div>
-                    <h2 className="text-5xl font-oswald font-bold">{champion.name}</h2>
+                    <div className="text-7xl">{champion?.logo}</div>
+                    <h2 className="text-5xl font-oswald font-bold">{champion?.name}</h2>
                     <p className="text-xl text-muted-foreground">
-                      Победители плей-офф VNHL {champion.season}
+                      Победители плей-офф VNHL {champion?.season}
                     </p>
                     <div className="grid grid-cols-3 gap-6 mt-8 max-w-2xl mx-auto">
                       <div className="bg-card p-6 rounded-lg">
-                        <p className="text-3xl font-bold font-oswald text-primary">{champion.wins}</p>
+                        <p className="text-3xl font-bold font-oswald text-primary">{champion?.wins}</p>
                         <p className="text-sm text-muted-foreground mt-2">Побед</p>
                       </div>
                       <div className="bg-card p-6 rounded-lg">
-                        <p className="text-3xl font-bold font-oswald text-primary">{champion.playoffRecord}</p>
+                        <p className="text-3xl font-bold font-oswald text-primary">{champion?.playoffRecord}</p>
                         <p className="text-sm text-muted-foreground mt-2">Плей-офф</p>
                       </div>
                       <div className="bg-card p-6 rounded-lg">
-                        <p className="text-3xl font-bold font-oswald text-primary">{champion.goals}</p>
+                        <p className="text-3xl font-bold font-oswald text-primary">{champion?.goals}</p>
                         <p className="text-sm text-muted-foreground mt-2">Голов</p>
                       </div>
                     </div>
@@ -499,7 +499,7 @@ const Index = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  {rules.map((rule: any, idx: number) => (
+                  {rules?.map((rule: any, idx: number) => (
                     <div key={idx} className="border-l-4 border-primary pl-6 py-4 bg-muted/30 rounded-r-lg">
                       <h3 className="text-xl font-oswald font-semibold mb-3">{rule.title}</h3>
                       <p className="text-muted-foreground leading-relaxed">{rule.content}</p>
