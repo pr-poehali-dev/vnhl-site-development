@@ -26,25 +26,25 @@ const StandingsTab = ({ teams }: StandingsTabProps) => {
     <Card>
       <CardHeader>
         <div className="space-y-4">
-          <CardTitle className="text-3xl font-oswald">Турнирная таблица</CardTitle>
+          <CardTitle className="text-2xl md:text-3xl font-oswald">Турнирная таблица</CardTitle>
           <Tabs value={conferenceTab} onValueChange={setConferenceTab}>
             <TabsList className="grid w-full max-w-md grid-cols-2">
-              <TabsTrigger value="east" className="font-oswald">Восточная Конференция</TabsTrigger>
-              <TabsTrigger value="west" className="font-oswald">Западная Конференция</TabsTrigger>
+              <TabsTrigger value="east" className="font-oswald text-xs md:text-base">Восточная</TabsTrigger>
+              <TabsTrigger value="west" className="font-oswald text-xs md:text-base">Западная</TabsTrigger>
             </TabsList>
             
             <TabsContent value="east" className="mt-6">
-              <div className="overflow-x-auto">
-                <table className="w-full">
+              <div className="overflow-x-auto -mx-4 md:mx-0">
+                <table className="w-full min-w-[600px]">
                   <thead>
                     <tr className="border-b-2 border-primary">
-                      <th className="text-left py-4 px-2 font-oswald">#</th>
-                      <th className="text-left py-4 px-4 font-oswald">Команда</th>
-                      <th className="text-center py-4 px-2 font-oswald">И</th>
-                      <th className="text-center py-4 px-2 font-oswald">В</th>
-                      <th className="text-center py-4 px-2 font-oswald">П</th>
-                      <th className="text-center py-4 px-2 font-oswald">Голы</th>
-                      <th className="text-center py-4 px-2 font-oswald bg-primary/10">О</th>
+                      <th className="text-left py-2 md:py-4 px-1 md:px-2 font-oswald text-xs md:text-base">#</th>
+                      <th className="text-left py-2 md:py-4 px-2 md:px-4 font-oswald text-xs md:text-base">Команда</th>
+                      <th className="text-center py-2 md:py-4 px-1 md:px-2 font-oswald text-xs md:text-base">И</th>
+                      <th className="text-center py-2 md:py-4 px-1 md:px-2 font-oswald text-xs md:text-base">В</th>
+                      <th className="text-center py-2 md:py-4 px-1 md:px-2 font-oswald text-xs md:text-base">П</th>
+                      <th className="text-center py-2 md:py-4 px-1 md:px-2 font-oswald text-xs md:text-base hidden sm:table-cell">Голы</th>
+                      <th className="text-center py-2 md:py-4 px-1 md:px-2 font-oswald bg-primary/10 text-xs md:text-base">О</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -55,23 +55,23 @@ const StandingsTab = ({ teams }: StandingsTabProps) => {
                           idx < 4 ? 'bg-primary/5' : ''
                         }`}
                       >
-                        <td className="py-4 px-2 font-bold">{idx + 1}</td>
-                        <td className="py-4 px-4">
-                          <div className="flex items-center gap-3">
-                            <span className="text-2xl">{team.logo}</span>
-                            <span className="font-medium">{team.name}</span>
+                        <td className="py-2 md:py-4 px-1 md:px-2 font-bold text-sm md:text-base">{idx + 1}</td>
+                        <td className="py-2 md:py-4 px-2 md:px-4">
+                          <div className="flex items-center gap-1 md:gap-3">
+                            <span className="text-lg md:text-2xl">{team.logo}</span>
+                            <span className="font-medium text-xs md:text-base truncate max-w-[120px] md:max-w-none">{team.name}</span>
                             {idx < 4 && (
-                              <Badge variant="outline" className="ml-2 border-primary text-primary">
+                              <Badge variant="outline" className="ml-1 md:ml-2 border-primary text-primary text-[10px] md:text-xs px-1 md:px-2 hidden md:inline-flex">
                                 Плей-офф
                               </Badge>
                             )}
                           </div>
                         </td>
-                        <td className="text-center py-4 px-2">{team.games}</td>
-                        <td className="text-center py-4 px-2 text-green-600 font-semibold">{team.wins}</td>
-                        <td className="text-center py-4 px-2 text-red-600 font-semibold">{team.losses}</td>
-                        <td className="text-center py-4 px-2">{team.goals}</td>
-                        <td className="text-center py-4 px-2 font-bold text-lg bg-primary/10">{team.points}</td>
+                        <td className="text-center py-2 md:py-4 px-1 md:px-2 text-xs md:text-base">{team.games}</td>
+                        <td className="text-center py-2 md:py-4 px-1 md:px-2 text-green-600 font-semibold text-xs md:text-base">{team.wins}</td>
+                        <td className="text-center py-2 md:py-4 px-1 md:px-2 text-red-600 font-semibold text-xs md:text-base">{team.losses}</td>
+                        <td className="text-center py-2 md:py-4 px-1 md:px-2 text-xs md:text-base hidden sm:table-cell">{team.goals}</td>
+                        <td className="text-center py-2 md:py-4 px-1 md:px-2 font-bold text-sm md:text-lg bg-primary/10">{team.points}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -80,17 +80,17 @@ const StandingsTab = ({ teams }: StandingsTabProps) => {
             </TabsContent>
 
             <TabsContent value="west" className="mt-6">
-              <div className="overflow-x-auto">
-                <table className="w-full">
+              <div className="overflow-x-auto -mx-4 md:mx-0">
+                <table className="w-full min-w-[600px]">
                   <thead>
                     <tr className="border-b-2 border-primary">
-                      <th className="text-left py-4 px-2 font-oswald">#</th>
-                      <th className="text-left py-4 px-4 font-oswald">Команда</th>
-                      <th className="text-center py-4 px-2 font-oswald">И</th>
-                      <th className="text-center py-4 px-2 font-oswald">В</th>
-                      <th className="text-center py-4 px-2 font-oswald">П</th>
-                      <th className="text-center py-4 px-2 font-oswald">Голы</th>
-                      <th className="text-center py-4 px-2 font-oswald bg-primary/10">О</th>
+                      <th className="text-left py-2 md:py-4 px-1 md:px-2 font-oswald text-xs md:text-base">#</th>
+                      <th className="text-left py-2 md:py-4 px-2 md:px-4 font-oswald text-xs md:text-base">Команда</th>
+                      <th className="text-center py-2 md:py-4 px-1 md:px-2 font-oswald text-xs md:text-base">И</th>
+                      <th className="text-center py-2 md:py-4 px-1 md:px-2 font-oswald text-xs md:text-base">В</th>
+                      <th className="text-center py-2 md:py-4 px-1 md:px-2 font-oswald text-xs md:text-base">П</th>
+                      <th className="text-center py-2 md:py-4 px-1 md:px-2 font-oswald text-xs md:text-base hidden sm:table-cell">Голы</th>
+                      <th className="text-center py-2 md:py-4 px-1 md:px-2 font-oswald bg-primary/10 text-xs md:text-base">О</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -101,23 +101,23 @@ const StandingsTab = ({ teams }: StandingsTabProps) => {
                           idx < 4 ? 'bg-primary/5' : ''
                         }`}
                       >
-                        <td className="py-4 px-2 font-bold">{idx + 1}</td>
-                        <td className="py-4 px-4">
-                          <div className="flex items-center gap-3">
-                            <span className="text-2xl">{team.logo}</span>
-                            <span className="font-medium">{team.name}</span>
+                        <td className="py-2 md:py-4 px-1 md:px-2 font-bold text-sm md:text-base">{idx + 1}</td>
+                        <td className="py-2 md:py-4 px-2 md:px-4">
+                          <div className="flex items-center gap-1 md:gap-3">
+                            <span className="text-lg md:text-2xl">{team.logo}</span>
+                            <span className="font-medium text-xs md:text-base truncate max-w-[120px] md:max-w-none">{team.name}</span>
                             {idx < 4 && (
-                              <Badge variant="outline" className="ml-2 border-primary text-primary">
+                              <Badge variant="outline" className="ml-1 md:ml-2 border-primary text-primary text-[10px] md:text-xs px-1 md:px-2 hidden md:inline-flex">
                                 Плей-офф
                               </Badge>
                             )}
                           </div>
                         </td>
-                        <td className="text-center py-4 px-2">{team.games}</td>
-                        <td className="text-center py-4 px-2 text-green-600 font-semibold">{team.wins}</td>
-                        <td className="text-center py-4 px-2 text-red-600 font-semibold">{team.losses}</td>
-                        <td className="text-center py-4 px-2">{team.goals}</td>
-                        <td className="text-center py-4 px-2 font-bold text-lg bg-primary/10">{team.points}</td>
+                        <td className="text-center py-2 md:py-4 px-1 md:px-2 text-xs md:text-base">{team.games}</td>
+                        <td className="text-center py-2 md:py-4 px-1 md:px-2 text-green-600 font-semibold text-xs md:text-base">{team.wins}</td>
+                        <td className="text-center py-2 md:py-4 px-1 md:px-2 text-red-600 font-semibold text-xs md:text-base">{team.losses}</td>
+                        <td className="text-center py-2 md:py-4 px-1 md:px-2 text-xs md:text-base hidden sm:table-cell">{team.goals}</td>
+                        <td className="text-center py-2 md:py-4 px-1 md:px-2 font-bold text-sm md:text-lg bg-primary/10">{team.points}</td>
                       </tr>
                     ))}
                   </tbody>

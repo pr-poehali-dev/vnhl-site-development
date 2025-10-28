@@ -120,11 +120,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary to-background">
-      <header className="bg-secondary text-white py-6 shadow-xl">
+      <header className="bg-secondary text-white py-4 md:py-6 shadow-xl">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="text-5xl flex items-center justify-center w-16 h-16">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
+              <div className="text-3xl md:text-5xl flex items-center justify-center w-10 h-10 md:w-16 md:h-16">
                 {siteIcon.startsWith('data:') || siteIcon.startsWith('http') ? (
                   <img src={siteIcon} alt="VNHL" className="w-full h-full object-contain" />
                 ) : (
@@ -132,43 +132,48 @@ const Index = () => {
                 )}
               </div>
               <div>
-                <h1 className="text-5xl font-oswald font-bold tracking-wider">VNHL</h1>
-                <p className="text-sm text-muted-foreground mt-1">Виртуальная Национальная Хоккейная Лига</p>
+                <h1 className="text-3xl md:text-5xl font-oswald font-bold tracking-wider">VNHL</h1>
+                <p className="text-xs md:text-sm text-muted-foreground mt-1 hidden sm:block">Виртуальная Национальная Хоккейная Лига</p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               <ThemeToggle />
-              <Button variant="default" onClick={() => setShowAdmin(true)} className="bg-white text-secondary hover:bg-gray-100">
-                <Icon name="Settings" className="mr-2" size={20} />
-                Админ-Панель
+              <Button variant="default" onClick={() => setShowAdmin(true)} className="bg-white text-secondary hover:bg-gray-100 text-sm md:text-base">
+                <Icon name="Settings" className="mr-0 md:mr-2" size={20} />
+                <span className="hidden sm:inline">Админ-Панель</span>
               </Button>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-2 md:px-4 py-4 md:py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-8 h-14">
-            <TabsTrigger value="standings" className="text-base font-oswald">
-              <Icon name="Trophy" className="mr-2" size={20} />
-              Таблица
+          <TabsList className="grid w-full grid-cols-5 mb-4 md:mb-8 h-auto md:h-14">
+            <TabsTrigger value="standings" className="text-xs md:text-base font-oswald flex-col md:flex-row gap-1 md:gap-2 py-2 md:py-0">
+              <Icon name="Trophy" className="md:mr-2" size={16} />
+              <span className="hidden sm:inline">Таблица</span>
+              <span className="sm:hidden">📊</span>
             </TabsTrigger>
-            <TabsTrigger value="schedule" className="text-base font-oswald">
-              <Icon name="Calendar" className="mr-2" size={20} />
-              Календарь
+            <TabsTrigger value="schedule" className="text-xs md:text-base font-oswald flex-col md:flex-row gap-1 md:gap-2 py-2 md:py-0">
+              <Icon name="Calendar" className="md:mr-2" size={16} />
+              <span className="hidden sm:inline">Календарь</span>
+              <span className="sm:hidden">📅</span>
             </TabsTrigger>
-            <TabsTrigger value="playoffs" className="text-base font-oswald">
-              <Icon name="Target" className="mr-2" size={20} />
-              Плей-офф
+            <TabsTrigger value="playoffs" className="text-xs md:text-base font-oswald flex-col md:flex-row gap-1 md:gap-2 py-2 md:py-0">
+              <Icon name="Target" className="md:mr-2" size={16} />
+              <span className="hidden sm:inline">Плей-офф</span>
+              <span className="sm:hidden">🎯</span>
             </TabsTrigger>
-            <TabsTrigger value="champion" className="text-base font-oswald">
-              <Icon name="Award" className="mr-2" size={20} />
-              Чемпион
+            <TabsTrigger value="champion" className="text-xs md:text-base font-oswald flex-col md:flex-row gap-1 md:gap-2 py-2 md:py-0">
+              <Icon name="Award" className="md:mr-2" size={16} />
+              <span className="hidden sm:inline">Чемпион</span>
+              <span className="sm:hidden">🏆</span>
             </TabsTrigger>
-            <TabsTrigger value="rules" className="text-base font-oswald">
-              <Icon name="BookOpen" className="mr-2" size={20} />
-              Правила
+            <TabsTrigger value="rules" className="text-xs md:text-base font-oswald flex-col md:flex-row gap-1 md:gap-2 py-2 md:py-0">
+              <Icon name="BookOpen" className="md:mr-2" size={16} />
+              <span className="hidden sm:inline">Правила</span>
+              <span className="sm:hidden">📖</span>
             </TabsTrigger>
           </TabsList>
 
