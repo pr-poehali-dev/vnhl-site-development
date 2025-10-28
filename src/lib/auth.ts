@@ -1,28 +1,23 @@
-const ADMIN_PASSWORD_HASH = 'a8f5f167f44f4964e6c998dee827110c';
-
-export const hashPassword = async (password: string): Promise<string> => {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('MD5', data).catch(() => {
-    let hash = 0;
-    for (let i = 0; i < password.length; i++) {
-      const char = password.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash;
-    }
-    return new Uint8Array([hash]);
-  });
-  
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-};
-
 export const verifyPassword = async (password: string): Promise<boolean> => {
-  if (password === '55935589k') {
-    return true;
+  try {
+    const response = await fetch('https://functions.poehali.dev/e3ba00e7-fe93-4a7c-a328-9c5525c4d27e', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ password }),
+    });
+    
+    if (!response.ok) {
+      return false;
+    }
+    
+    const data = await response.json();
+    return data.valid === true;
+  } catch (error) {
+    console.error('Password verification error:', error);
+    return false;
   }
-  const hash = await hashPassword(password);
-  return hash === ADMIN_PASSWORD_HASH;
 };
 
 export const isAuthenticated = (): boolean => {
