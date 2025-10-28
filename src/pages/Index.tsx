@@ -33,17 +33,27 @@ const initialMatches = [
 ];
 
 const initialPlayoffBracket = {
+  roundOf16: [
+    { id: 1, team1: 'Команда 1', team2: 'Команда 16', score1: null, score2: null },
+    { id: 2, team1: 'Команда 8', team2: 'Команда 9', score1: null, score2: null },
+    { id: 3, team1: 'Команда 4', team2: 'Команда 13', score1: null, score2: null },
+    { id: 4, team1: 'Команда 5', team2: 'Команда 12', score1: null, score2: null },
+    { id: 5, team1: 'Команда 2', team2: 'Команда 15', score1: null, score2: null },
+    { id: 6, team1: 'Команда 7', team2: 'Команда 10', score1: null, score2: null },
+    { id: 7, team1: 'Команда 3', team2: 'Команда 14', score1: null, score2: null },
+    { id: 8, team1: 'Команда 6', team2: 'Команда 11', score1: null, score2: null },
+  ],
   quarterFinals: [
-    { id: 1, team1: 'Стальные Тигры', team2: 'Огненные Фениксы', score1: null, score2: null },
-    { id: 2, team1: 'Ледяные Волки', team2: 'Северные Рыси', score1: null, score2: null },
-    { id: 3, team1: 'Красные Драконы', team2: 'Синие Акулы', score1: null, score2: null },
-    { id: 4, team1: 'Полярные Медведи', team2: 'Грозовые Ястребы', score1: null, score2: null },
+    { id: 9, team1: 'Победитель 1/8 №1', team2: 'Победитель 1/8 №2', score1: null, score2: null },
+    { id: 10, team1: 'Победитель 1/8 №3', team2: 'Победитель 1/8 №4', score1: null, score2: null },
+    { id: 11, team1: 'Победитель 1/8 №5', team2: 'Победитель 1/8 №6', score1: null, score2: null },
+    { id: 12, team1: 'Победитель 1/8 №7', team2: 'Победитель 1/8 №8', score1: null, score2: null },
   ],
   semiFinals: [
-    { id: 5, team1: 'Победитель 1/4 №1', team2: 'Победитель 1/4 №2', score1: null, score2: null },
-    { id: 6, team1: 'Победитель 1/4 №3', team2: 'Победитель 1/4 №4', score1: null, score2: null },
+    { id: 13, team1: 'Победитель 1/4 №1', team2: 'Победитель 1/4 №2', score1: null, score2: null },
+    { id: 14, team1: 'Победитель 1/4 №3', team2: 'Победитель 1/4 №4', score1: null, score2: null },
   ],
-  final: { id: 7, team1: 'Победитель 1/2 №1', team2: 'Победитель 1/2 №2', score1: null, score2: null },
+  final: { id: 15, team1: 'Победитель 1/2 №1', team2: 'Победитель 1/2 №2', score1: null, score2: null },
 };
 
 const initialRules = [
@@ -170,22 +180,17 @@ const Index = () => {
                 <p className="text-sm text-muted-foreground mt-1">Виртуальная Национальная Хоккейная Лига</p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <Badge variant="outline" className="text-lg px-6 py-2 border-white text-white">
-                Сезон 2025
-              </Badge>
-              <Button variant="default" onClick={() => setShowAdmin(true)} className="bg-white text-secondary hover:bg-gray-100">
-                <Icon name="Settings" className="mr-2" size={20} />
-                Админ-Панель
-              </Button>
-            </div>
+            <Button variant="default" onClick={() => setShowAdmin(true)} className="bg-white text-secondary hover:bg-gray-100">
+              <Icon name="Settings" className="mr-2" size={20} />
+              Админ-Панель
+            </Button>
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-8 h-14">
+          <TabsList className="grid w-full grid-cols-4 mb-8 h-14">
             <TabsTrigger value="standings" className="text-base font-oswald">
               <Icon name="Trophy" className="mr-2" size={20} />
               Таблица
@@ -198,10 +203,6 @@ const Index = () => {
               <Icon name="Target" className="mr-2" size={20} />
               Плей-офф
             </TabsTrigger>
-            <TabsTrigger value="champion" className="text-base font-oswald">
-              <Icon name="Award" className="mr-2" size={20} />
-              Чемпион
-            </TabsTrigger>
             <TabsTrigger value="rules" className="text-base font-oswald">
               <Icon name="BookOpen" className="mr-2" size={20} />
               Правила
@@ -211,12 +212,13 @@ const Index = () => {
           <TabsContent value="standings" className="animate-fade-in">
             <Card>
               <CardHeader>
-                <CardTitle className="text-3xl font-oswald mb-4">Турнирная таблица</CardTitle>
-                <Tabs value={conferenceTab} onValueChange={setConferenceTab}>
-                  <TabsList className="grid w-full max-w-md grid-cols-2">
-                    <TabsTrigger value="east" className="font-oswald">Восточная Конференция</TabsTrigger>
-                    <TabsTrigger value="west" className="font-oswald">Западная Конференция</TabsTrigger>
-                  </TabsList>
+                <div className="space-y-4">
+                  <CardTitle className="text-3xl font-oswald">Турнирная таблица</CardTitle>
+                  <Tabs value={conferenceTab} onValueChange={setConferenceTab}>
+                    <TabsList className="grid w-full max-w-md grid-cols-2">
+                      <TabsTrigger value="east" className="font-oswald">Восточная Конференция</TabsTrigger>
+                      <TabsTrigger value="west" className="font-oswald">Западная Конференция</TabsTrigger>
+                    </TabsList>
                   
                   <TabsContent value="east" className="mt-6">
                     <div className="overflow-x-auto">
@@ -309,7 +311,8 @@ const Index = () => {
                       </table>
                     </div>
                   </TabsContent>
-                </Tabs>
+                  </Tabs>
+                </div>
               </CardHeader>
             </Card>
           </TabsContent>
@@ -367,106 +370,126 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="playoffs" className="animate-fade-in">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-3xl font-oswald">Сетка плей-офф</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-oswald text-center mb-6">1/4 финала</h3>
-                    {playoffBracket.quarterFinals.map((match: any) => (
-                      <Card key={match.id} className="bg-secondary/5">
-                        <CardContent className="p-4">
-                          <div className="space-y-2">
+            <div className="space-y-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-3xl font-oswald">Сетка плей-офф</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-oswald text-center mb-6">1/8 финала</h3>
+                      {playoffBracket.roundOf16.map((match: any) => (
+                        <Card key={match.id} className="bg-secondary/5">
+                          <CardContent className="p-3">
+                            <div className="space-y-2">
+                              <div className="flex justify-between items-center">
+                                <span className="font-medium text-sm">{match.team1}</span>
+                                <Badge variant="outline" className="text-xs">{match.score1 ?? '—'}</Badge>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span className="font-medium text-sm">{match.team2}</span>
+                                <Badge variant="outline" className="text-xs">{match.score2 ?? '—'}</Badge>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-oswald text-center mb-6">1/4 финала</h3>
+                      {playoffBracket.quarterFinals.map((match: any) => (
+                        <Card key={match.id} className="bg-secondary/5 mt-8">
+                          <CardContent className="p-4">
+                            <div className="space-y-2">
+                              <div className="flex justify-between items-center">
+                                <span className="font-medium">{match.team1}</span>
+                                <Badge variant="outline">{match.score1 ?? '—'}</Badge>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span className="font-medium">{match.team2}</span>
+                                <Badge variant="outline">{match.score2 ?? '—'}</Badge>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-oswald text-center mb-6">1/2 финала</h3>
+                      {playoffBracket.semiFinals.map((match: any) => (
+                        <Card key={match.id} className="bg-secondary/5 mt-24">
+                          <CardContent className="p-4">
+                            <div className="space-y-2">
+                              <div className="flex justify-between items-center">
+                                <span className="font-medium">{match.team1}</span>
+                                <Badge variant="outline">{match.score1 ?? '—'}</Badge>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span className="font-medium">{match.team2}</span>
+                                <Badge variant="outline">{match.score2 ?? '—'}</Badge>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-oswald text-center mb-6">Финал</h3>
+                      <Card className="bg-primary/10 border-2 border-primary mt-40">
+                        <CardContent className="p-6">
+                          <div className="space-y-3">
                             <div className="flex justify-between items-center">
-                              <span className="font-medium">{match.team1}</span>
-                              <Badge variant="outline">{match.score1 ?? '—'}</Badge>
+                              <span className="font-semibold text-lg">{playoffBracket.final.team1}</span>
+                              <Badge className="text-lg px-3 py-1">{playoffBracket.final.score1 ?? '—'}</Badge>
                             </div>
                             <div className="flex justify-between items-center">
-                              <span className="font-medium">{match.team2}</span>
-                              <Badge variant="outline">{match.score2 ?? '—'}</Badge>
+                              <span className="font-semibold text-lg">{playoffBracket.final.team2}</span>
+                              <Badge className="text-lg px-3 py-1">{playoffBracket.final.score2 ?? '—'}</Badge>
                             </div>
                           </div>
                         </CardContent>
                       </Card>
-                    ))}
-                  </div>
-
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-oswald text-center mb-6">1/2 финала</h3>
-                    {playoffBracket.semiFinals.map((match: any) => (
-                      <Card key={match.id} className="bg-secondary/5 mt-16">
-                        <CardContent className="p-4">
-                          <div className="space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="font-medium">{match.team1}</span>
-                              <Badge variant="outline">{match.score1 ?? '—'}</Badge>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="font-medium">{match.team2}</span>
-                              <Badge variant="outline">{match.score2 ?? '—'}</Badge>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-oswald text-center mb-6">Финал</h3>
-                    <Card className="bg-primary/10 border-2 border-primary mt-32">
-                      <CardContent className="p-6">
-                        <div className="space-y-3">
-                          <div className="flex justify-between items-center">
-                            <span className="font-semibold text-lg">{playoffBracket.final.team1}</span>
-                            <Badge className="text-lg px-3 py-1">{playoffBracket.final.score1 ?? '—'}</Badge>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="font-semibold text-lg">{playoffBracket.final.team2}</span>
-                            <Badge className="text-lg px-3 py-1">{playoffBracket.final.score2 ?? '—'}</Badge>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="champion" className="animate-fade-in">
-            <Card className="bg-gradient-to-br from-primary/20 to-secondary/20 border-2 border-primary">
-              <CardHeader className="text-center">
-                <div className="flex justify-center mb-4">
-                  <Icon name="Trophy" size={64} className="text-primary" />
-                </div>
-                <CardTitle className="text-4xl font-oswald">Чемпион сезона {champion.season}</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <div className="space-y-6">
-                  <div className="text-7xl">{champion.logo}</div>
-                  <h2 className="text-5xl font-oswald font-bold">{champion.name}</h2>
-                  <p className="text-xl text-muted-foreground">
-                    Победители плей-офф VNHL {champion.season}
-                  </p>
-                  <div className="grid grid-cols-3 gap-6 mt-8 max-w-2xl mx-auto">
-                    <div className="bg-card p-6 rounded-lg">
-                      <p className="text-3xl font-bold font-oswald text-primary">{champion.wins}</p>
-                      <p className="text-sm text-muted-foreground mt-2">Побед</p>
-                    </div>
-                    <div className="bg-card p-6 rounded-lg">
-                      <p className="text-3xl font-bold font-oswald text-primary">{champion.playoffRecord}</p>
-                      <p className="text-sm text-muted-foreground mt-2">Плей-офф</p>
-                    </div>
-                    <div className="bg-card p-6 rounded-lg">
-                      <p className="text-3xl font-bold font-oswald text-primary">{champion.goals}</p>
-                      <p className="text-sm text-muted-foreground mt-2">Голов</p>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-gradient-to-br from-primary/20 to-secondary/20 border-2 border-primary">
+                <CardHeader className="text-center">
+                  <div className="flex justify-center mb-4">
+                    <Icon name="Trophy" size={64} className="text-primary" />
+                  </div>
+                  <CardTitle className="text-4xl font-oswald">Чемпион сезона {champion.season}</CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <div className="space-y-6">
+                    <div className="text-7xl">{champion.logo}</div>
+                    <h2 className="text-5xl font-oswald font-bold">{champion.name}</h2>
+                    <p className="text-xl text-muted-foreground">
+                      Победители плей-офф VNHL {champion.season}
+                    </p>
+                    <div className="grid grid-cols-3 gap-6 mt-8 max-w-2xl mx-auto">
+                      <div className="bg-card p-6 rounded-lg">
+                        <p className="text-3xl font-bold font-oswald text-primary">{champion.wins}</p>
+                        <p className="text-sm text-muted-foreground mt-2">Побед</p>
+                      </div>
+                      <div className="bg-card p-6 rounded-lg">
+                        <p className="text-3xl font-bold font-oswald text-primary">{champion.playoffRecord}</p>
+                        <p className="text-sm text-muted-foreground mt-2">Плей-офф</p>
+                      </div>
+                      <div className="bg-card p-6 rounded-lg">
+                        <p className="text-3xl font-bold font-oswald text-primary">{champion.goals}</p>
+                        <p className="text-sm text-muted-foreground mt-2">Голов</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="rules" className="animate-fade-in">

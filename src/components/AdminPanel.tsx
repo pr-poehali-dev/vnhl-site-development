@@ -253,7 +253,7 @@ const AdminPanel = ({
     setMatches(matches.filter(match => match.id !== id));
   };
 
-  const updatePlayoffMatch = (stage: 'quarterFinals' | 'semiFinals' | 'final', id: number, field: string, value: any) => {
+  const updatePlayoffMatch = (stage: 'roundOf16' | 'quarterFinals' | 'semiFinals' | 'final', id: number, field: string, value: any) => {
     if (stage === 'final') {
       setPlayoffBracket({
         ...playoffBracket,
@@ -415,6 +415,44 @@ const AdminPanel = ({
 
           <TabsContent value="playoffs">
             <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>1/8 финала</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {playoffBracket.roundOf16.map((match: PlayoffMatch) => (
+                      <div key={match.id} className="grid grid-cols-5 gap-4 items-center">
+                        <Input
+                          value={match.team1}
+                          onChange={(e) => updatePlayoffMatch('roundOf16', match.id, 'team1', e.target.value)}
+                          className="col-span-2"
+                        />
+                        <Input
+                          type="number"
+                          value={match.score1 ?? ''}
+                          onChange={(e) => updatePlayoffMatch('roundOf16', match.id, 'score1', e.target.value ? parseInt(e.target.value) : null)}
+                          placeholder="—"
+                          className="text-center"
+                        />
+                        <Input
+                          type="number"
+                          value={match.score2 ?? ''}
+                          onChange={(e) => updatePlayoffMatch('roundOf16', match.id, 'score2', e.target.value ? parseInt(e.target.value) : null)}
+                          placeholder="—"
+                          className="text-center"
+                        />
+                        <Input
+                          value={match.team2}
+                          onChange={(e) => updatePlayoffMatch('roundOf16', match.id, 'team2', e.target.value)}
+                          className="col-span-1"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
               <Card>
                 <CardHeader>
                   <CardTitle>1/4 финала</CardTitle>
