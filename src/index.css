@@ -7,32 +7,32 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 215 20% 15%;
+    --foreground: 0 0% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 215 20% 15%;
+    --card-foreground: 0 0% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 20% 15%;
+    --popover-foreground: 0 0% 10%;
 
-    --primary: 199 89% 48%;
+    --primary: 0 0% 45%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 215 25% 27%;
+    --secondary: 0 0% 20%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 20% 94%;
-    --muted-foreground: 215 15% 50%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 199 89% 48%;
+    --accent: 0 0% 45%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 215 15% 88%;
-    --input: 215 15% 88%;
-    --ring: 199 89% 48%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 0 0% 45%;
 
     --radius: 0.5rem;
 
@@ -54,33 +54,33 @@
   }
 
   .dark {
-    --background: 215 25% 10%;
+    --background: 0 0% 10%;
     --foreground: 0 0% 98%;
 
-    --card: 215 25% 13%;
+    --card: 0 0% 13%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 215 25% 13%;
+    --popover: 0 0% 13%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 199 89% 48%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 60%;
+    --primary-foreground: 0 0% 10%;
 
-    --secondary: 215 20% 20%;
+    --secondary: 0 0% 20%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 215 20% 20%;
-    --muted-foreground: 215 10% 65%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 65%;
 
-    --accent: 199 89% 48%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 0 0% 60%;
+    --accent-foreground: 0 0% 10%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 215 20% 25%;
-    --input: 215 20% 25%;
-    --ring: 199 89% 48%;
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
+    --ring: 0 0% 60%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

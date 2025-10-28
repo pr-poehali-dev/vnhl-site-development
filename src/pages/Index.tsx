@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
+import AdminLogin from '@/components/AdminLogin';
+import AdminPanel from '@/components/AdminPanel';
+import { isAuthenticated } from '@/lib/auth';
 
-const teams = [
+const initialTeams = [
   { id: 1, name: 'Стальные Тигры', games: 30, wins: 22, losses: 6, ot: 2, points: 46, logo: '🐯' },
   { id: 2, name: 'Ледяные Волки', games: 30, wins: 21, losses: 7, ot: 2, points: 44, logo: '🐺' },
   { id: 3, name: 'Красные Драконы', games: 30, wins: 20, losses: 8, ot: 2, points: 42, logo: '🐉' },
@@ -19,7 +23,7 @@ const teams = [
   { id: 12, name: 'Серебряные Лисы', games: 30, wins: 8, losses: 19, ot: 3, points: 19, logo: '🦊' },
 ];
 
-const matches = [
+const initialMatches = [
   { id: 1, date: '2025-10-30', time: '19:00', home: 'Стальные Тигры', away: 'Ледяные Волки', homeScore: null, awayScore: null },
   { id: 2, date: '2025-10-30', time: '20:30', home: 'Красные Драконы', away: 'Полярные Медведи', homeScore: null, awayScore: null },
   { id: 3, date: '2025-10-31', time: '18:00', home: 'Грозовые Ястребы', away: 'Синие Акулы', homeScore: null, awayScore: null },
@@ -28,7 +32,7 @@ const matches = [
   { id: 6, date: '2025-11-02', time: '20:00', home: 'Чёрные Вороны', away: 'Серебряные Лисы', homeScore: null, awayScore: null },
 ];
 
-const playoffBracket = {
+const initialPlayoffBracket = {
   quarterFinals: [
     { id: 1, team1: 'Стальные Тигры', team2: 'Огненные Фениксы', score1: null, score2: null },
     { id: 2, team1: 'Ледяные Волки', team2: 'Северные Рыси', score1: null, score2: null },
@@ -42,7 +46,7 @@ const playoffBracket = {
   final: { id: 7, team1: 'Победитель 1/2 №1', team2: 'Победитель 1/2 №2', score1: null, score2: null },
 };
 
-const rules = [
+const initialRules = [
   {
     title: 'Формат регулярного сезона',
     content: 'Каждая команда проводит 30 матчей в регулярном сезоне. За победу в основное время команда получает 2 очка, за победу в овертайме или буллитах - 2 очка, за поражение в овертайме или буллитах - 1 очко, за поражение в основное время - 0 очков.',
@@ -65,8 +69,93 @@ const rules = [
   },
 ];
 
+const initialChampion = {
+  name: 'Стальные Тигры',
+  logo: '🐯',
+  wins: 52,
+  playoffRecord: '16-3',
+  goals: 278,
+  season: '2024'
+};
+
 const Index = () => {
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
   const [activeTab, setActiveTab] = useState('standings');
+
+  const [teams, setTeams] = useState(() => {
+    const saved = localStorage.getItem('vnhl_teams');
+    return saved ? JSON.parse(saved) : initialTeams;
+  });
+
+  const [matches, setMatches] = useState(() => {
+    const saved = localStorage.getItem('vnhl_matches');
+    return saved ? JSON.parse(saved) : initialMatches;
+  });
+
+  const [playoffBracket, setPlayoffBracket] = useState(() => {
+    const saved = localStorage.getItem('vnhl_playoffs');
+    return saved ? JSON.parse(saved) : initialPlayoffBracket;
+  });
+
+  const [rules, setRules] = useState(() => {
+    const saved = localStorage.getItem('vnhl_rules');
+    return saved ? JSON.parse(saved) : initialRules;
+  });
+
+  const [champion, setChampion] = useState(() => {
+    const saved = localStorage.getItem('vnhl_champion');
+    return saved ? JSON.parse(saved) : initialChampion;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('vnhl_teams', JSON.stringify(teams));
+  }, [teams]);
+
+  useEffect(() => {
+    localStorage.setItem('vnhl_matches', JSON.stringify(matches));
+  }, [matches]);
+
+  useEffect(() => {
+    localStorage.setItem('vnhl_playoffs', JSON.stringify(playoffBracket));
+  }, [playoffBracket]);
+
+  useEffect(() => {
+    localStorage.setItem('vnhl_rules', JSON.stringify(rules));
+  }, [rules]);
+
+  useEffect(() => {
+    localStorage.setItem('vnhl_champion', JSON.stringify(champion));
+  }, [champion]);
+
+  useEffect(() => {
+    setAuthenticated(isAuthenticated());
+  }, []);
+
+  if (showAdmin && !authenticated) {
+    return <AdminLogin onSuccess={() => setAuthenticated(true)} />;
+  }
+
+  if (showAdmin && authenticated) {
+    return (
+      <AdminPanel
+        teams={teams}
+        setTeams={setTeams}
+        matches={matches}
+        setMatches={setMatches}
+        playoffBracket={playoffBracket}
+        setPlayoffBracket={setPlayoffBracket}
+        rules={rules}
+        setRules={setRules}
+        champion={champion}
+        setChampion={setChampion}
+        onLogout={() => {
+          setAuthenticated(false);
+          setShowAdmin(false);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary to-background">
@@ -80,9 +169,15 @@ const Index = () => {
                 <p className="text-sm text-muted-foreground mt-1">Виртуальная Национальная Хоккейная Лига</p>
               </div>
             </div>
-            <Badge variant="outline" className="text-lg px-6 py-2 border-primary text-white">
-              Сезон 2025
-            </Badge>
+            <div className="flex items-center gap-4">
+              <Badge variant="outline" className="text-lg px-6 py-2 border-white text-white">
+                Сезон 2025
+              </Badge>
+              <Button variant="outline" onClick={() => setShowAdmin(true)}>
+                <Icon name="Settings" className="mr-2" size={20} />
+                Админ
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -132,7 +227,7 @@ const Index = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {teams.map((team, idx) => (
+                      {teams.map((team: any, idx: number) => (
                         <tr
                           key={team.id}
                           className={`border-b hover:bg-muted/50 transition-colors ${
@@ -172,7 +267,7 @@ const Index = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {matches.map((match) => (
+                  {matches.map((match: any) => (
                     <Card key={match.id} className="hover:shadow-lg transition-shadow">
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between">
@@ -226,7 +321,7 @@ const Index = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                   <div className="space-y-4">
                     <h3 className="text-xl font-oswald text-center mb-6">1/4 финала</h3>
-                    {playoffBracket.quarterFinals.map((match) => (
+                    {playoffBracket.quarterFinals.map((match: any) => (
                       <Card key={match.id} className="bg-secondary/5">
                         <CardContent className="p-4">
                           <div className="space-y-2">
@@ -246,7 +341,7 @@ const Index = () => {
 
                   <div className="space-y-4">
                     <h3 className="text-xl font-oswald text-center mb-6">1/2 финала</h3>
-                    {playoffBracket.semiFinals.map((match) => (
+                    {playoffBracket.semiFinals.map((match: any) => (
                       <Card key={match.id} className="bg-secondary/5 mt-16">
                         <CardContent className="p-4">
                           <div className="space-y-2">
@@ -292,26 +387,26 @@ const Index = () => {
                 <div className="flex justify-center mb-4">
                   <Icon name="Trophy" size={64} className="text-primary" />
                 </div>
-                <CardTitle className="text-4xl font-oswald">Чемпион сезона 2024</CardTitle>
+                <CardTitle className="text-4xl font-oswald">Чемпион сезона {champion.season}</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
                 <div className="space-y-6">
-                  <div className="text-7xl">🐯</div>
-                  <h2 className="text-5xl font-oswald font-bold">Стальные Тигры</h2>
+                  <div className="text-7xl">{champion.logo}</div>
+                  <h2 className="text-5xl font-oswald font-bold">{champion.name}</h2>
                   <p className="text-xl text-muted-foreground">
-                    Победители плей-офф VNHL 2024
+                    Победители плей-офф VNHL {champion.season}
                   </p>
                   <div className="grid grid-cols-3 gap-6 mt-8 max-w-2xl mx-auto">
                     <div className="bg-card p-6 rounded-lg">
-                      <p className="text-3xl font-bold font-oswald text-primary">52</p>
+                      <p className="text-3xl font-bold font-oswald text-primary">{champion.wins}</p>
                       <p className="text-sm text-muted-foreground mt-2">Побед</p>
                     </div>
                     <div className="bg-card p-6 rounded-lg">
-                      <p className="text-3xl font-bold font-oswald text-primary">16-3</p>
+                      <p className="text-3xl font-bold font-oswald text-primary">{champion.playoffRecord}</p>
                       <p className="text-sm text-muted-foreground mt-2">Плей-офф</p>
                     </div>
                     <div className="bg-card p-6 rounded-lg">
-                      <p className="text-3xl font-bold font-oswald text-primary">278</p>
+                      <p className="text-3xl font-bold font-oswald text-primary">{champion.goals}</p>
                       <p className="text-sm text-muted-foreground mt-2">Голов</p>
                     </div>
                   </div>
@@ -327,7 +422,7 @@ const Index = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  {rules.map((rule, idx) => (
+                  {rules.map((rule: any, idx: number) => (
                     <div key={idx} className="border-l-4 border-primary pl-6 py-4 bg-muted/30 rounded-r-lg">
                       <h3 className="text-xl font-oswald font-semibold mb-3">{rule.title}</h3>
                       <p className="text-muted-foreground leading-relaxed">{rule.content}</p>
