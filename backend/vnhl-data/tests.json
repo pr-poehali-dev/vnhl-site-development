@@ -1,17 +1,17 @@
 {
   "tests": [
     {
-      "name": "Get teams data",
+      "name": "Get teams list",
       "method": "GET",
-      "path": "/?path=teams",
+      "path": "/?resource=teams",
       "expectedStatus": 200,
       "expectedBody": [],
       "bodyMatcher": "type"
     },
     {
-      "name": "Get matches data",
+      "name": "Get matches list",
       "method": "GET",
-      "path": "/?path=matches",
+      "path": "/?resource=matches",
       "expectedStatus": 200,
       "expectedBody": [],
       "bodyMatcher": "type"
@@ -19,10 +19,10 @@
     {
       "name": "Get site settings",
       "method": "GET",
-      "path": "/?path=settings",
+      "path": "/?resource=settings&key=site_icon",
       "expectedStatus": 200,
       "expectedBody": {
-        "site_icon": "string"
+        "value": "string"
       },
       "bodyMatcher": "partial"
     }

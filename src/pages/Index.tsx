@@ -51,21 +51,70 @@ const Index = () => {
         api.getSettings()
       ]);
 
-      if (teamsData.length > 0) setTeams(teamsData);
-      if (matchesData.length > 0) setMatches(matchesData);
-      if (playoffsData.roundOf16) setPlayoffBracket(playoffsData);
-      if (rulesData.length > 0) setRules(rulesData);
-      if (championData.team_name) {
-        setChampion({
-          teamName: championData.team_name,
-          logo: championData.logo,
-          season: championData.season,
-          wins: championData.wins,
-          losses: championData.losses,
-          mvp: championData.mvp
-        });
+      if (teamsData.length > 0) {
+        setTeams(teamsData);
+      } else {
+        const localTeams = localStorage.getItem('vnhl_teams');
+        if (localTeams) {
+          const parsedTeams = JSON.parse(localTeams);
+          setTeams(parsedTeams);
+          await api.saveTeams(parsedTeams);
+        }
       }
-      if (settingsData.site_icon) setSiteIcon(settingsData.site_icon);
+
+      if (matchesData.length > 0) {
+        setMatches(matchesData);
+      } else {
+        const localMatches = localStorage.getItem('vnhl_matches');
+        if (localMatches) {
+          const parsedMatches = JSON.parse(localMatches);
+          setMatches(parsedMatches);
+          await api.saveMatches(parsedMatches);
+        }
+      }
+
+      if (playoffsData.roundOf16) {
+        setPlayoffBracket(playoffsData);
+      } else {
+        const localPlayoffs = localStorage.getItem('vnhl_playoffs');
+        if (localPlayoffs) {
+          const parsedPlayoffs = JSON.parse(localPlayoffs);
+          setPlayoffBracket(parsedPlayoffs);
+          await api.savePlayoffs(parsedPlayoffs);
+        }
+      }
+
+      if (rulesData) {
+        setRules(rulesData);
+      } else {
+        const localRules = localStorage.getItem('vnhl_rules');
+        if (localRules) {
+          const parsedRules = JSON.parse(localRules);
+          setRules(parsedRules);
+          await api.saveRules(parsedRules);
+        }
+      }
+
+      if (championData.teamName) {
+        setChampion(championData);
+      } else {
+        const localChampion = localStorage.getItem('vnhl_champion');
+        if (localChampion) {
+          const parsedChampion = JSON.parse(localChampion);
+          setChampion(parsedChampion);
+          await api.saveChampion(parsedChampion);
+        }
+      }
+
+      if (settingsData) {
+        setSiteIcon(settingsData);
+      } else {
+        const localIcon = localStorage.getItem('vnhl_site_icon');
+        if (localIcon) {
+          setSiteIcon(localIcon);
+          await api.saveSettings('site_icon', localIcon);
+        }
+      }
     } catch (error) {
       console.error('Error loading data:', error);
     } finally {
@@ -100,7 +149,7 @@ const Index = () => {
 
   const saveSiteIconToDb = async (newIcon: string) => {
     setSiteIcon(newIcon);
-    await api.saveSettings({ siteIcon: newIcon });
+    await api.saveSettings('site_icon', newIcon);
   };
 
   if (showAdmin && !authenticated) {
