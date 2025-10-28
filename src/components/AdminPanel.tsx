@@ -6,6 +6,23 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { logout } from '@/lib/auth';
 import Icon from '@/components/ui/icon';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface Team {
   id: number;
@@ -65,6 +82,91 @@ interface AdminPanelProps {
   onLogout: () => void;
 }
 
+interface SortableTeamItemProps {
+  team: Team;
+  updateTeam: (id: number, field: keyof Team, value: any) => void;
+  deleteTeam: (id: number) => void;
+}
+
+function SortableTeamItem({ team, updateTeam, deleteTeam }: SortableTeamItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: team.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <Card ref={setNodeRef} style={style} className={isDragging ? 'shadow-lg' : ''}>
+      <CardContent className="p-4">
+        <div className="grid grid-cols-1 md:grid-cols-10 gap-4 items-center">
+          <div
+            className="cursor-grab active:cursor-grabbing flex items-center justify-center"
+            {...attributes}
+            {...listeners}
+          >
+            <Icon name="GripVertical" size={24} className="text-muted-foreground" />
+          </div>
+          <Input
+            value={team.logo}
+            onChange={(e) => updateTeam(team.id, 'logo', e.target.value)}
+            placeholder="🏒"
+            className="text-center text-2xl"
+          />
+          <Input
+            value={team.name}
+            onChange={(e) => updateTeam(team.id, 'name', e.target.value)}
+            className="md:col-span-2"
+          />
+          <select
+            value={team.conference}
+            onChange={(e) => updateTeam(team.id, 'conference', e.target.value)}
+            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+          >
+            <option value="Восточная">Восточная</option>
+            <option value="Западная">Западная</option>
+          </select>
+          <Input
+            type="number"
+            value={team.wins}
+            onChange={(e) => updateTeam(team.id, 'wins', parseInt(e.target.value))}
+            placeholder="В"
+          />
+          <Input
+            type="number"
+            value={team.losses}
+            onChange={(e) => updateTeam(team.id, 'losses', parseInt(e.target.value))}
+            placeholder="П"
+          />
+          <Input
+            type="number"
+            value={team.goals}
+            onChange={(e) => updateTeam(team.id, 'goals', parseInt(e.target.value))}
+            placeholder="Голы"
+          />
+          <Input
+            type="number"
+            value={team.points}
+            onChange={(e) => updateTeam(team.id, 'points', parseInt(e.target.value))}
+            placeholder="О"
+          />
+          <Button variant="destructive" onClick={() => deleteTeam(team.id)}>
+            <Icon name="Trash2" size={20} />
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 const AdminPanel = ({ 
   teams, 
   setTeams, 
@@ -79,6 +181,13 @@ const AdminPanel = ({
   onLogout 
 }: AdminPanelProps) => {
   const [activeTab, setActiveTab] = useState('teams');
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const handleLogout = () => {
     logout();
@@ -108,6 +217,17 @@ const AdminPanel = ({
 
   const deleteTeam = (id: number) => {
     setTeams(teams.filter(team => team.id !== id));
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = teams.findIndex((team) => team.id === active.id);
+      const newIndex = teams.findIndex((team) => team.id === over.id);
+
+      setTeams(arrayMove(teams, oldIndex, newIndex));
+    }
   };
 
   const updateMatch = (id: number, field: keyof Match, value: any) => {
@@ -199,62 +319,33 @@ const AdminPanel = ({
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {teams.map((team) => (
-                    <Card key={team.id}>
-                      <CardContent className="p-4">
-                        <div className="grid grid-cols-1 md:grid-cols-9 gap-4 items-center">
-                          <Input
-                            value={team.logo}
-                            onChange={(e) => updateTeam(team.id, 'logo', e.target.value)}
-                            placeholder="🏒"
-                            className="text-center text-2xl"
-                          />
-                          <Input
-                            value={team.name}
-                            onChange={(e) => updateTeam(team.id, 'name', e.target.value)}
-                            className="md:col-span-2"
-                          />
-                          <select
-                            value={team.conference}
-                            onChange={(e) => updateTeam(team.id, 'conference', e.target.value)}
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                          >
-                            <option value="Восточная">Восточная</option>
-                            <option value="Западная">Западная</option>
-                          </select>
-                          <Input
-                            type="number"
-                            value={team.wins}
-                            onChange={(e) => updateTeam(team.id, 'wins', parseInt(e.target.value))}
-                            placeholder="В"
-                          />
-                          <Input
-                            type="number"
-                            value={team.losses}
-                            onChange={(e) => updateTeam(team.id, 'losses', parseInt(e.target.value))}
-                            placeholder="П"
-                          />
-                          <Input
-                            type="number"
-                            value={team.goals}
-                            onChange={(e) => updateTeam(team.id, 'goals', parseInt(e.target.value))}
-                            placeholder="Голы"
-                          />
-                          <Input
-                            type="number"
-                            value={team.points}
-                            onChange={(e) => updateTeam(team.id, 'points', parseInt(e.target.value))}
-                            placeholder="О"
-                          />
-                          <Button variant="destructive" onClick={() => deleteTeam(team.id)}>
-                            <Icon name="Trash2" size={20} />
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                <div className="mb-4 p-4 bg-muted/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground flex items-center gap-2">
+                    <Icon name="Info" size={16} />
+                    Перетаскивайте команды за иконку, чтобы изменить их порядок в таблице
+                  </p>
                 </div>
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={handleDragEnd}
+                >
+                  <SortableContext
+                    items={teams.map(t => t.id)}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    <div className="space-y-4">
+                      {teams.map((team) => (
+                        <SortableTeamItem
+                          key={team.id}
+                          team={team}
+                          updateTeam={updateTeam}
+                          deleteTeam={deleteTeam}
+                        />
+                      ))}
+                    </div>
+                  </SortableContext>
+                </DndContext>
               </CardContent>
             </Card>
           </TabsContent>

@@ -175,7 +175,7 @@ const Index = () => {
               </Badge>
               <Button variant="default" onClick={() => setShowAdmin(true)} className="bg-white text-secondary hover:bg-gray-100">
                 <Icon name="Settings" className="mr-2" size={20} />
-                АДМИН
+                Админ-Панель
               </Button>
             </div>
           </div>
