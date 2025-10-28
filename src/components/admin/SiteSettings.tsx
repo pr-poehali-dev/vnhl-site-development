@@ -68,7 +68,7 @@ const SiteSettings = ({ siteIcon, setSiteIcon }: SiteSettingsProps) => {
           <div className="flex items-center gap-6 p-4 bg-secondary/10 rounded-lg">
             <div className="text-6xl flex items-center justify-center w-20 h-20 bg-background rounded-lg">
               {siteIcon.startsWith('data:') || siteIcon.startsWith('http') ? (
-                <img src={siteIcon} alt="Site icon" className="w-full h-full object-contain rounded-lg" />
+                <img src={siteIcon} alt="Site icon" className="w-full h-full object-contain rounded-lg mix-blend-multiply dark:mix-blend-screen" />
               ) : (
                 <span>{siteIcon}</span>
               )}

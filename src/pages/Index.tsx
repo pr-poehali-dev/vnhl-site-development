@@ -126,7 +126,7 @@ const Index = () => {
             <div className="flex items-center gap-2 md:gap-4">
               <div className="text-3xl md:text-5xl flex items-center justify-center w-10 h-10 md:w-16 md:h-16">
                 {siteIcon.startsWith('data:') || siteIcon.startsWith('http') ? (
-                  <img src={siteIcon} alt="VNHL" className="w-full h-full object-contain" />
+                  <img src={siteIcon} alt="VNHL" className="w-full h-full object-contain mix-blend-multiply dark:mix-blend-screen" />
                 ) : (
                   <span>{siteIcon}</span>
                 )}
