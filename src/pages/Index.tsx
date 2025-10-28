@@ -9,18 +9,18 @@ import AdminPanel from '@/components/AdminPanel';
 import { isAuthenticated } from '@/lib/auth';
 
 const initialTeams = [
-  { id: 1, name: 'Стальные Тигры', games: 30, wins: 22, losses: 6, ot: 2, points: 46, logo: '🐯' },
-  { id: 2, name: 'Ледяные Волки', games: 30, wins: 21, losses: 7, ot: 2, points: 44, logo: '🐺' },
-  { id: 3, name: 'Красные Драконы', games: 30, wins: 20, losses: 8, ot: 2, points: 42, logo: '🐉' },
-  { id: 4, name: 'Полярные Медведи', games: 30, wins: 19, losses: 9, ot: 2, points: 40, logo: '🐻' },
-  { id: 5, name: 'Грозовые Ястребы', games: 30, wins: 18, losses: 10, ot: 2, points: 38, logo: '🦅' },
-  { id: 6, name: 'Синие Акулы', games: 30, wins: 17, losses: 11, ot: 2, points: 36, logo: '🦈' },
-  { id: 7, name: 'Северные Рыси', games: 30, wins: 16, losses: 12, ot: 2, points: 34, logo: '🐱' },
-  { id: 8, name: 'Огненные Фениксы', games: 30, wins: 15, losses: 13, ot: 2, points: 32, logo: '🔥' },
-  { id: 9, name: 'Снежные Барсы', games: 30, wins: 13, losses: 14, ot: 3, points: 29, logo: '❄️' },
-  { id: 10, name: 'Гранитные Орлы', games: 30, wins: 12, losses: 16, ot: 2, points: 26, logo: '🦅' },
-  { id: 11, name: 'Чёрные Вороны', games: 30, wins: 10, losses: 17, ot: 3, points: 23, logo: '🐦' },
-  { id: 12, name: 'Серебряные Лисы', games: 30, wins: 8, losses: 19, ot: 3, points: 19, logo: '🦊' },
+  { id: 1, name: 'Стальные Тигры', games: 30, wins: 22, losses: 6, goals: 145, points: 46, logo: '🐯', conference: 'Восточная' },
+  { id: 2, name: 'Ледяные Волки', games: 30, wins: 21, losses: 7, goals: 138, points: 44, logo: '🐺', conference: 'Восточная' },
+  { id: 3, name: 'Красные Драконы', games: 30, wins: 20, losses: 8, goals: 132, points: 42, logo: '🐉', conference: 'Восточная' },
+  { id: 4, name: 'Полярные Медведи', games: 30, wins: 19, losses: 9, goals: 128, points: 40, logo: '🐻', conference: 'Западная' },
+  { id: 5, name: 'Грозовые Ястребы', games: 30, wins: 18, losses: 10, goals: 121, points: 38, logo: '🦅', conference: 'Западная' },
+  { id: 6, name: 'Синие Акулы', games: 30, wins: 17, losses: 11, goals: 115, points: 36, logo: '🦈', conference: 'Восточная' },
+  { id: 7, name: 'Северные Рыси', games: 30, wins: 16, losses: 12, goals: 109, points: 34, logo: '🐱', conference: 'Западная' },
+  { id: 8, name: 'Огненные Фениксы', games: 30, wins: 15, losses: 13, goals: 103, points: 32, logo: '🔥', conference: 'Восточная' },
+  { id: 9, name: 'Снежные Барсы', games: 30, wins: 13, losses: 14, goals: 98, points: 29, logo: '❄️', conference: 'Западная' },
+  { id: 10, name: 'Гранитные Орлы', games: 30, wins: 12, losses: 16, goals: 92, points: 26, logo: '🦅', conference: 'Западная' },
+  { id: 11, name: 'Чёрные Вороны', games: 30, wins: 10, losses: 17, goals: 85, points: 23, logo: '🐦', conference: 'Восточная' },
+  { id: 12, name: 'Серебряные Лисы', games: 30, wins: 8, losses: 19, goals: 78, points: 19, logo: '🦊', conference: 'Западная' },
 ];
 
 const initialMatches = [
@@ -173,9 +173,9 @@ const Index = () => {
               <Badge variant="outline" className="text-lg px-6 py-2 border-white text-white">
                 Сезон 2025
               </Badge>
-              <Button variant="outline" onClick={() => setShowAdmin(true)}>
+              <Button variant="default" onClick={() => setShowAdmin(true)} className="bg-white text-secondary hover:bg-gray-100">
                 <Icon name="Settings" className="mr-2" size={20} />
-                Админ
+                АДМИН
               </Button>
             </div>
           </div>
@@ -208,56 +208,109 @@ const Index = () => {
           </TabsList>
 
           <TabsContent value="standings" className="animate-fade-in">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-3xl font-oswald">Турнирная таблица регулярного сезона</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b-2 border-primary">
-                        <th className="text-left py-4 px-2 font-oswald">#</th>
-                        <th className="text-left py-4 px-4 font-oswald">Команда</th>
-                        <th className="text-center py-4 px-2 font-oswald">И</th>
-                        <th className="text-center py-4 px-2 font-oswald">В</th>
-                        <th className="text-center py-4 px-2 font-oswald">П</th>
-                        <th className="text-center py-4 px-2 font-oswald">ОТ</th>
-                        <th className="text-center py-4 px-2 font-oswald bg-primary/10">О</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {teams.map((team: any, idx: number) => (
-                        <tr
-                          key={team.id}
-                          className={`border-b hover:bg-muted/50 transition-colors ${
-                            idx < 8 ? 'bg-primary/5' : ''
-                          }`}
-                        >
-                          <td className="py-4 px-2 font-bold">{idx + 1}</td>
-                          <td className="py-4 px-4">
-                            <div className="flex items-center gap-3">
-                              <span className="text-2xl">{team.logo}</span>
-                              <span className="font-medium">{team.name}</span>
-                              {idx < 8 && (
-                                <Badge variant="outline" className="ml-2 border-primary text-primary">
-                                  Плей-офф
-                                </Badge>
-                              )}
-                            </div>
-                          </td>
-                          <td className="text-center py-4 px-2">{team.games}</td>
-                          <td className="text-center py-4 px-2 text-green-600 font-semibold">{team.wins}</td>
-                          <td className="text-center py-4 px-2 text-red-600 font-semibold">{team.losses}</td>
-                          <td className="text-center py-4 px-2">{team.ot}</td>
-                          <td className="text-center py-4 px-2 font-bold text-lg bg-primary/10">{team.points}</td>
+            <div className="space-y-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-3xl font-oswald">Восточная Конференция</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b-2 border-primary">
+                          <th className="text-left py-4 px-2 font-oswald">#</th>
+                          <th className="text-left py-4 px-4 font-oswald">Команда</th>
+                          <th className="text-center py-4 px-2 font-oswald">И</th>
+                          <th className="text-center py-4 px-2 font-oswald">В</th>
+                          <th className="text-center py-4 px-2 font-oswald">П</th>
+                          <th className="text-center py-4 px-2 font-oswald">Голы</th>
+                          <th className="text-center py-4 px-2 font-oswald bg-primary/10">О</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
+                      </thead>
+                      <tbody>
+                        {teams.filter((team: any) => team.conference === 'Восточная').map((team: any, idx: number) => (
+                          <tr
+                            key={team.id}
+                            className={`border-b hover:bg-muted/50 transition-colors ${
+                              idx < 4 ? 'bg-primary/5' : ''
+                            }`}
+                          >
+                            <td className="py-4 px-2 font-bold">{idx + 1}</td>
+                            <td className="py-4 px-4">
+                              <div className="flex items-center gap-3">
+                                <span className="text-2xl">{team.logo}</span>
+                                <span className="font-medium">{team.name}</span>
+                                {idx < 4 && (
+                                  <Badge variant="outline" className="ml-2 border-primary text-primary">
+                                    Плей-офф
+                                  </Badge>
+                                )}
+                              </div>
+                            </td>
+                            <td className="text-center py-4 px-2">{team.games}</td>
+                            <td className="text-center py-4 px-2 text-green-600 font-semibold">{team.wins}</td>
+                            <td className="text-center py-4 px-2 text-red-600 font-semibold">{team.losses}</td>
+                            <td className="text-center py-4 px-2">{team.goals}</td>
+                            <td className="text-center py-4 px-2 font-bold text-lg bg-primary/10">{team.points}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-3xl font-oswald">Западная Конференция</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b-2 border-primary">
+                          <th className="text-left py-4 px-2 font-oswald">#</th>
+                          <th className="text-left py-4 px-4 font-oswald">Команда</th>
+                          <th className="text-center py-4 px-2 font-oswald">И</th>
+                          <th className="text-center py-4 px-2 font-oswald">В</th>
+                          <th className="text-center py-4 px-2 font-oswald">П</th>
+                          <th className="text-center py-4 px-2 font-oswald">Голы</th>
+                          <th className="text-center py-4 px-2 font-oswald bg-primary/10">О</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {teams.filter((team: any) => team.conference === 'Западная').map((team: any, idx: number) => (
+                          <tr
+                            key={team.id}
+                            className={`border-b hover:bg-muted/50 transition-colors ${
+                              idx < 4 ? 'bg-primary/5' : ''
+                            }`}
+                          >
+                            <td className="py-4 px-2 font-bold">{idx + 1}</td>
+                            <td className="py-4 px-4">
+                              <div className="flex items-center gap-3">
+                                <span className="text-2xl">{team.logo}</span>
+                                <span className="font-medium">{team.name}</span>
+                                {idx < 4 && (
+                                  <Badge variant="outline" className="ml-2 border-primary text-primary">
+                                    Плей-офф
+                                  </Badge>
+                                )}
+                              </div>
+                            </td>
+                            <td className="text-center py-4 px-2">{team.games}</td>
+                            <td className="text-center py-4 px-2 text-green-600 font-semibold">{team.wins}</td>
+                            <td className="text-center py-4 px-2 text-red-600 font-semibold">{team.losses}</td>
+                            <td className="text-center py-4 px-2">{team.goals}</td>
+                            <td className="text-center py-4 px-2 font-bold text-lg bg-primary/10">{team.points}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="schedule" className="animate-fade-in">

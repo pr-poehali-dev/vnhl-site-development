@@ -13,9 +13,10 @@ interface Team {
   games: number;
   wins: number;
   losses: number;
-  ot: number;
+  goals: number;
   points: number;
   logo: string;
+  conference: string;
 }
 
 interface Match {
@@ -98,9 +99,10 @@ const AdminPanel = ({
       games: 0,
       wins: 0,
       losses: 0,
-      ot: 0,
+      goals: 0,
       points: 0,
-      logo: '⭐'
+      logo: '⭐',
+      conference: 'Восточная'
     }]);
   };
 
@@ -201,7 +203,7 @@ const AdminPanel = ({
                   {teams.map((team) => (
                     <Card key={team.id}>
                       <CardContent className="p-4">
-                        <div className="grid grid-cols-1 md:grid-cols-8 gap-4 items-center">
+                        <div className="grid grid-cols-1 md:grid-cols-9 gap-4 items-center">
                           <Input
                             value={team.logo}
                             onChange={(e) => updateTeam(team.id, 'logo', e.target.value)}
@@ -213,6 +215,14 @@ const AdminPanel = ({
                             onChange={(e) => updateTeam(team.id, 'name', e.target.value)}
                             className="md:col-span-2"
                           />
+                          <select
+                            value={team.conference}
+                            onChange={(e) => updateTeam(team.id, 'conference', e.target.value)}
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                          >
+                            <option value="Восточная">Восточная</option>
+                            <option value="Западная">Западная</option>
+                          </select>
                           <Input
                             type="number"
                             value={team.wins}
@@ -227,9 +237,9 @@ const AdminPanel = ({
                           />
                           <Input
                             type="number"
-                            value={team.ot}
-                            onChange={(e) => updateTeam(team.id, 'ot', parseInt(e.target.value))}
-                            placeholder="ОТ"
+                            value={team.goals}
+                            onChange={(e) => updateTeam(team.id, 'goals', parseInt(e.target.value))}
+                            placeholder="Голы"
                           />
                           <Input
                             type="number"
