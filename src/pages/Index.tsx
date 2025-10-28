@@ -1,98 +1,28 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import AdminLogin from '@/components/AdminLogin';
 import AdminPanel from '@/components/AdminPanel';
+import StandingsTab from '@/components/StandingsTab';
+import ScheduleTab from '@/components/ScheduleTab';
+import PlayoffsTab from '@/components/PlayoffsTab';
+import ChampionTab from '@/components/ChampionTab';
+import RulesTab from '@/components/RulesTab';
 import { isAuthenticated } from '@/lib/auth';
-
-const initialTeams = [
-  { id: 1, name: 'Стальные Тигры', games: 30, wins: 22, losses: 6, goals: 145, points: 46, logo: '🐯', conference: 'Восточная' },
-  { id: 2, name: 'Ледяные Волки', games: 30, wins: 21, losses: 7, goals: 138, points: 44, logo: '🐺', conference: 'Восточная' },
-  { id: 3, name: 'Красные Драконы', games: 30, wins: 20, losses: 8, goals: 132, points: 42, logo: '🐉', conference: 'Восточная' },
-  { id: 4, name: 'Полярные Медведи', games: 30, wins: 19, losses: 9, goals: 128, points: 40, logo: '🐻', conference: 'Западная' },
-  { id: 5, name: 'Грозовые Ястребы', games: 30, wins: 18, losses: 10, goals: 121, points: 38, logo: '🦅', conference: 'Западная' },
-  { id: 6, name: 'Синие Акулы', games: 30, wins: 17, losses: 11, goals: 115, points: 36, logo: '🦈', conference: 'Восточная' },
-  { id: 7, name: 'Северные Рыси', games: 30, wins: 16, losses: 12, goals: 109, points: 34, logo: '🐱', conference: 'Западная' },
-  { id: 8, name: 'Огненные Фениксы', games: 30, wins: 15, losses: 13, goals: 103, points: 32, logo: '🔥', conference: 'Восточная' },
-  { id: 9, name: 'Снежные Барсы', games: 30, wins: 13, losses: 14, goals: 98, points: 29, logo: '❄️', conference: 'Западная' },
-  { id: 10, name: 'Гранитные Орлы', games: 30, wins: 12, losses: 16, goals: 92, points: 26, logo: '🦅', conference: 'Западная' },
-  { id: 11, name: 'Чёрные Вороны', games: 30, wins: 10, losses: 17, goals: 85, points: 23, logo: '🐦', conference: 'Восточная' },
-  { id: 12, name: 'Серебряные Лисы', games: 30, wins: 8, losses: 19, goals: 78, points: 19, logo: '🦊', conference: 'Западная' },
-];
-
-const initialMatches = [
-  { id: 1, date: '2025-10-30', time: '19:00', home: 'Стальные Тигры', away: 'Ледяные Волки', homeScore: null, awayScore: null },
-  { id: 2, date: '2025-10-30', time: '20:30', home: 'Красные Драконы', away: 'Полярные Медведи', homeScore: null, awayScore: null },
-  { id: 3, date: '2025-10-31', time: '18:00', home: 'Грозовые Ястребы', away: 'Синие Акулы', homeScore: null, awayScore: null },
-  { id: 4, date: '2025-11-01', time: '19:30', home: 'Северные Рыси', away: 'Огненные Фениксы', homeScore: null, awayScore: null },
-  { id: 5, date: '2025-11-02', time: '17:00', home: 'Снежные Барсы', away: 'Гранитные Орлы', homeScore: null, awayScore: null },
-  { id: 6, date: '2025-11-02', time: '20:00', home: 'Чёрные Вороны', away: 'Серебряные Лисы', homeScore: null, awayScore: null },
-];
-
-const initialPlayoffBracket = {
-  roundOf16: [
-    { id: 1, team1: 'Команда 1', team2: 'Команда 16', score1: null, score2: null },
-    { id: 2, team1: 'Команда 8', team2: 'Команда 9', score1: null, score2: null },
-    { id: 3, team1: 'Команда 4', team2: 'Команда 13', score1: null, score2: null },
-    { id: 4, team1: 'Команда 5', team2: 'Команда 12', score1: null, score2: null },
-    { id: 5, team1: 'Команда 2', team2: 'Команда 15', score1: null, score2: null },
-    { id: 6, team1: 'Команда 7', team2: 'Команда 10', score1: null, score2: null },
-    { id: 7, team1: 'Команда 3', team2: 'Команда 14', score1: null, score2: null },
-    { id: 8, team1: 'Команда 6', team2: 'Команда 11', score1: null, score2: null },
-  ],
-  quarterFinals: [
-    { id: 9, team1: 'Победитель 1/8 №1', team2: 'Победитель 1/8 №2', score1: null, score2: null },
-    { id: 10, team1: 'Победитель 1/8 №3', team2: 'Победитель 1/8 №4', score1: null, score2: null },
-    { id: 11, team1: 'Победитель 1/8 №5', team2: 'Победитель 1/8 №6', score1: null, score2: null },
-    { id: 12, team1: 'Победитель 1/8 №7', team2: 'Победитель 1/8 №8', score1: null, score2: null },
-  ],
-  semiFinals: [
-    { id: 13, team1: 'Победитель 1/4 №1', team2: 'Победитель 1/4 №2', score1: null, score2: null },
-    { id: 14, team1: 'Победитель 1/4 №3', team2: 'Победитель 1/4 №4', score1: null, score2: null },
-  ],
-  final: { id: 15, team1: 'Победитель 1/2 №1', team2: 'Победитель 1/2 №2', score1: null, score2: null },
-};
-
-const initialRules = [
-  {
-    title: 'Формат регулярного сезона',
-    content: 'Каждая команда проводит 30 матчей в регулярном сезоне. За победу в основное время команда получает 2 очка, за победу в овертайме или буллитах - 2 очка, за поражение в овертайме или буллитах - 1 очко, за поражение в основное время - 0 очков.',
-  },
-  {
-    title: 'Формат плей-офф',
-    content: 'В плей-офф выходят 8 лучших команд по итогам регулярного сезона. Сетка плей-офф включает 1/4 финала, 1/2 финала и финал. Все серии играются до 4 побед.',
-  },
-  {
-    title: 'Состав команды',
-    content: 'Максимальный состав команды - 25 игроков (20 полевых + 3 вратаря + 2 резервных). На матч может быть заявлено не более 20 игроков, включая 2 вратарей.',
-  },
-  {
-    title: 'Игровое время',
-    content: 'Матч состоит из 3 периодов по 20 минут чистого времени. В случае ничьей назначается овертайм 5 минут (3 на 3). Если победитель не выявлен - буллиты (3 игрока от каждой команды).',
-  },
-  {
-    title: 'Дисциплина',
-    content: 'За грубые нарушения правил игроки получают штрафы: малый штраф - 2 минуты, большой штраф - 5 минут + автоматическое удаление до конца матча. За три больших штрафа в сезоне - дисквалификация на 1 матч.',
-  },
-];
-
-const initialChampion = {
-  name: 'Стальные Тигры',
-  logo: '🐯',
-  wins: 52,
-  playoffRecord: '16-3',
-  goals: 278,
-  season: '2024'
-};
+import {
+  initialTeams,
+  initialMatches,
+  initialPlayoffBracket,
+  initialRules,
+  initialChampion,
+} from '@/data/initialData';
 
 const Index = () => {
   const [showAdmin, setShowAdmin] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const [activeTab, setActiveTab] = useState('standings');
-  const [conferenceTab, setConferenceTab] = useState('east');
 
   const [teams, setTeams] = useState(() => {
     const saved = localStorage.getItem('vnhl_teams');
@@ -180,17 +110,22 @@ const Index = () => {
                 <p className="text-sm text-muted-foreground mt-1">Виртуальная Национальная Хоккейная Лига</p>
               </div>
             </div>
-            <Button variant="default" onClick={() => setShowAdmin(true)} className="bg-white text-secondary hover:bg-gray-100">
-              <Icon name="Settings" className="mr-2" size={20} />
-              Админ-Панель
-            </Button>
+            <div className="flex items-center gap-4">
+              <Badge variant="outline" className="text-lg px-6 py-2 border-white text-white">
+                Сезон 2025
+              </Badge>
+              <Button variant="default" onClick={() => setShowAdmin(true)} className="bg-white text-secondary hover:bg-gray-100">
+                <Icon name="Settings" className="mr-2" size={20} />
+                Админ-Панель
+              </Button>
+            </div>
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8 h-14">
+          <TabsList className="grid w-full grid-cols-5 mb-8 h-14">
             <TabsTrigger value="standings" className="text-base font-oswald">
               <Icon name="Trophy" className="mr-2" size={20} />
               Таблица
@@ -203,6 +138,10 @@ const Index = () => {
               <Icon name="Target" className="mr-2" size={20} />
               Плей-офф
             </TabsTrigger>
+            <TabsTrigger value="champion" className="text-base font-oswald">
+              <Icon name="Award" className="mr-2" size={20} />
+              Чемпион
+            </TabsTrigger>
             <TabsTrigger value="rules" className="text-base font-oswald">
               <Icon name="BookOpen" className="mr-2" size={20} />
               Правила
@@ -210,311 +149,39 @@ const Index = () => {
           </TabsList>
 
           <TabsContent value="standings" className="animate-fade-in">
-            <Card>
-              <CardHeader>
-                <div className="space-y-4">
-                  <CardTitle className="text-3xl font-oswald">Турнирная таблица</CardTitle>
-                  <Tabs value={conferenceTab} onValueChange={setConferenceTab}>
-                    <TabsList className="grid w-full max-w-md grid-cols-2">
-                      <TabsTrigger value="east" className="font-oswald">Восточная Конференция</TabsTrigger>
-                      <TabsTrigger value="west" className="font-oswald">Западная Конференция</TabsTrigger>
-                    </TabsList>
-                  
-                  <TabsContent value="east" className="mt-6">
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
-                        <thead>
-                          <tr className="border-b-2 border-primary">
-                            <th className="text-left py-4 px-2 font-oswald">#</th>
-                            <th className="text-left py-4 px-4 font-oswald">Команда</th>
-                            <th className="text-center py-4 px-2 font-oswald">И</th>
-                            <th className="text-center py-4 px-2 font-oswald">В</th>
-                            <th className="text-center py-4 px-2 font-oswald">П</th>
-                            <th className="text-center py-4 px-2 font-oswald">Голы</th>
-                            <th className="text-center py-4 px-2 font-oswald bg-primary/10">О</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {teams?.filter((team: any) => team.conference === 'Восточная').map((team: any, idx: number) => (
-                            <tr
-                              key={team.id}
-                              className={`border-b hover:bg-muted/50 transition-colors ${
-                                idx < 4 ? 'bg-primary/5' : ''
-                              }`}
-                            >
-                              <td className="py-4 px-2 font-bold">{idx + 1}</td>
-                              <td className="py-4 px-4">
-                                <div className="flex items-center gap-3">
-                                  <span className="text-2xl">{team.logo}</span>
-                                  <span className="font-medium">{team.name}</span>
-                                  {idx < 4 && (
-                                    <Badge variant="outline" className="ml-2 border-primary text-primary">
-                                      Плей-офф
-                                    </Badge>
-                                  )}
-                                </div>
-                              </td>
-                              <td className="text-center py-4 px-2">{team.games}</td>
-                              <td className="text-center py-4 px-2 text-green-600 font-semibold">{team.wins}</td>
-                              <td className="text-center py-4 px-2 text-red-600 font-semibold">{team.losses}</td>
-                              <td className="text-center py-4 px-2">{team.goals}</td>
-                              <td className="text-center py-4 px-2 font-bold text-lg bg-primary/10">{team.points}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="west" className="mt-6">
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
-                        <thead>
-                          <tr className="border-b-2 border-primary">
-                            <th className="text-left py-4 px-2 font-oswald">#</th>
-                            <th className="text-left py-4 px-4 font-oswald">Команда</th>
-                            <th className="text-center py-4 px-2 font-oswald">И</th>
-                            <th className="text-center py-4 px-2 font-oswald">В</th>
-                            <th className="text-center py-4 px-2 font-oswald">П</th>
-                            <th className="text-center py-4 px-2 font-oswald">Голы</th>
-                            <th className="text-center py-4 px-2 font-oswald bg-primary/10">О</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {teams?.filter((team: any) => team.conference === 'Западная').map((team: any, idx: number) => (
-                            <tr
-                              key={team.id}
-                              className={`border-b hover:bg-muted/50 transition-colors ${
-                                idx < 4 ? 'bg-primary/5' : ''
-                              }`}
-                            >
-                              <td className="py-4 px-2 font-bold">{idx + 1}</td>
-                              <td className="py-4 px-4">
-                                <div className="flex items-center gap-3">
-                                  <span className="text-2xl">{team.logo}</span>
-                                  <span className="font-medium">{team.name}</span>
-                                  {idx < 4 && (
-                                    <Badge variant="outline" className="ml-2 border-primary text-primary">
-                                      Плей-офф
-                                    </Badge>
-                                  )}
-                                </div>
-                              </td>
-                              <td className="text-center py-4 px-2">{team.games}</td>
-                              <td className="text-center py-4 px-2 text-green-600 font-semibold">{team.wins}</td>
-                              <td className="text-center py-4 px-2 text-red-600 font-semibold">{team.losses}</td>
-                              <td className="text-center py-4 px-2">{team.goals}</td>
-                              <td className="text-center py-4 px-2 font-bold text-lg bg-primary/10">{team.points}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </TabsContent>
-                  </Tabs>
-                </div>
-              </CardHeader>
-            </Card>
+            <StandingsTab teams={teams} />
           </TabsContent>
 
           <TabsContent value="schedule" className="animate-fade-in">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-3xl font-oswald">Календарь матчей</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {matches?.map((match: any) => (
-                    <Card key={match.id} className="hover:shadow-lg transition-shadow">
-                      <CardContent className="p-6">
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <Icon name="Calendar" size={16} className="text-muted-foreground" />
-                              <span className="text-sm text-muted-foreground">
-                                {new Date(match.date).toLocaleDateString('ru-RU', {
-                                  weekday: 'long',
-                                  day: 'numeric',
-                                  month: 'long',
-                                })}
-                              </span>
-                              <Badge variant="outline">{match.time}</Badge>
-                            </div>
-                            <div className="grid grid-cols-3 gap-4 items-center mt-4">
-                              <div className="text-right">
-                                <p className="font-semibold text-lg">{match.home}</p>
-                              </div>
-                              <div className="text-center">
-                                <div className="flex items-center justify-center gap-4">
-                                  <span className="text-3xl font-bold font-oswald">
-                                    {match.homeScore ?? '—'}
-                                  </span>
-                                  <span className="text-muted-foreground">vs</span>
-                                  <span className="text-3xl font-bold font-oswald">
-                                    {match.awayScore ?? '—'}
-                                  </span>
-                                </div>
-                              </div>
-                              <div className="text-left">
-                                <p className="font-semibold text-lg">{match.away}</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <ScheduleTab matches={matches} />
           </TabsContent>
 
           <TabsContent value="playoffs" className="animate-fade-in">
-            <div className="space-y-8">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-3xl font-oswald">Сетка плей-офф</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                    <div className="space-y-4">
-                      <h3 className="text-xl font-oswald text-center mb-6">1/8 финала</h3>
-                      {playoffBracket?.roundOf16?.map((match: any) => (
-                        <Card key={match.id} className="bg-secondary/5">
-                          <CardContent className="p-3">
-                            <div className="space-y-2">
-                              <div className="flex justify-between items-center">
-                                <span className="font-medium text-sm">{match.team1}</span>
-                                <Badge variant="outline" className="text-xs">{match.score1 ?? '—'}</Badge>
-                              </div>
-                              <div className="flex justify-between items-center">
-                                <span className="font-medium text-sm">{match.team2}</span>
-                                <Badge variant="outline" className="text-xs">{match.score2 ?? '—'}</Badge>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
+            <PlayoffsTab playoffBracket={playoffBracket} />
+          </TabsContent>
 
-                    <div className="space-y-4">
-                      <h3 className="text-xl font-oswald text-center mb-6">1/4 финала</h3>
-                      {playoffBracket?.quarterFinals?.map((match: any) => (
-                        <Card key={match.id} className="bg-secondary/5 mt-8">
-                          <CardContent className="p-4">
-                            <div className="space-y-2">
-                              <div className="flex justify-between items-center">
-                                <span className="font-medium">{match.team1}</span>
-                                <Badge variant="outline">{match.score1 ?? '—'}</Badge>
-                              </div>
-                              <div className="flex justify-between items-center">
-                                <span className="font-medium">{match.team2}</span>
-                                <Badge variant="outline">{match.score2 ?? '—'}</Badge>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-
-                    <div className="space-y-4">
-                      <h3 className="text-xl font-oswald text-center mb-6">1/2 финала</h3>
-                      {playoffBracket?.semiFinals?.map((match: any) => (
-                        <Card key={match.id} className="bg-secondary/5 mt-24">
-                          <CardContent className="p-4">
-                            <div className="space-y-2">
-                              <div className="flex justify-between items-center">
-                                <span className="font-medium">{match.team1}</span>
-                                <Badge variant="outline">{match.score1 ?? '—'}</Badge>
-                              </div>
-                              <div className="flex justify-between items-center">
-                                <span className="font-medium">{match.team2}</span>
-                                <Badge variant="outline">{match.score2 ?? '—'}</Badge>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-
-                    <div className="space-y-4">
-                      <h3 className="text-xl font-oswald text-center mb-6">Финал</h3>
-                      <Card className="bg-primary/10 border-2 border-primary mt-40">
-                        <CardContent className="p-6">
-                          <div className="space-y-3">
-                            <div className="flex justify-between items-center">
-                              <span className="font-semibold text-lg">{playoffBracket?.final?.team1}</span>
-                              <Badge className="text-lg px-3 py-1">{playoffBracket?.final?.score1 ?? '—'}</Badge>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="font-semibold text-lg">{playoffBracket?.final?.team2}</span>
-                              <Badge className="text-lg px-3 py-1">{playoffBracket?.final?.score2 ?? '—'}</Badge>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-gradient-to-br from-primary/20 to-secondary/20 border-2 border-primary">
-                <CardHeader className="text-center">
-                  <div className="flex justify-center mb-4">
-                    <Icon name="Trophy" size={64} className="text-primary" />
-                  </div>
-                  <CardTitle className="text-4xl font-oswald">Чемпион сезона {champion?.season}</CardTitle>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <div className="space-y-6">
-                    <div className="text-7xl">{champion?.logo}</div>
-                    <h2 className="text-5xl font-oswald font-bold">{champion?.name}</h2>
-                    <p className="text-xl text-muted-foreground">
-                      Победители плей-офф VNHL {champion?.season}
-                    </p>
-                    <div className="grid grid-cols-3 gap-6 mt-8 max-w-2xl mx-auto">
-                      <div className="bg-card p-6 rounded-lg">
-                        <p className="text-3xl font-bold font-oswald text-primary">{champion?.wins}</p>
-                        <p className="text-sm text-muted-foreground mt-2">Побед</p>
-                      </div>
-                      <div className="bg-card p-6 rounded-lg">
-                        <p className="text-3xl font-bold font-oswald text-primary">{champion?.playoffRecord}</p>
-                        <p className="text-sm text-muted-foreground mt-2">Плей-офф</p>
-                      </div>
-                      <div className="bg-card p-6 rounded-lg">
-                        <p className="text-3xl font-bold font-oswald text-primary">{champion?.goals}</p>
-                        <p className="text-sm text-muted-foreground mt-2">Голов</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+          <TabsContent value="champion" className="animate-fade-in">
+            <ChampionTab champion={champion} />
           </TabsContent>
 
           <TabsContent value="rules" className="animate-fade-in">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-3xl font-oswald">Правила лиги VNHL</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {rules?.map((rule: any, idx: number) => (
-                    <div key={idx} className="border-l-4 border-primary pl-6 py-4 bg-muted/30 rounded-r-lg">
-                      <h3 className="text-xl font-oswald font-semibold mb-3">{rule.title}</h3>
-                      <p className="text-muted-foreground leading-relaxed">{rule.content}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <RulesTab rules={rules} />
           </TabsContent>
         </Tabs>
       </main>
 
       <footer className="bg-secondary text-white py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-muted-foreground">© 2025 VNHL. Все права защищены.</p>
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="text-3xl">🏒</div>
+            <h2 className="text-2xl font-oswald font-bold">VNHL</h2>
+          </div>
+          <p className="text-sm text-muted-foreground mb-2">
+            Виртуальная Национальная Хоккейная Лига
+          </p>
+          <p className="text-xs text-muted-foreground">
+            © 2025 VNHL. Все права защищены.
+          </p>
         </div>
       </footer>
     </div>
