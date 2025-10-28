@@ -56,6 +56,11 @@ const Index = () => {
     return saved ? JSON.parse(saved) : initialChampion;
   });
 
+  const [siteIcon, setSiteIcon] = useState(() => {
+    const saved = localStorage.getItem('vnhl_site_icon');
+    return saved || '🏒';
+  });
+
   useEffect(() => {
     localStorage.setItem('vnhl_teams', JSON.stringify(teams));
   }, [teams]);
@@ -75,6 +80,10 @@ const Index = () => {
   useEffect(() => {
     localStorage.setItem('vnhl_champion', JSON.stringify(champion));
   }, [champion]);
+
+  useEffect(() => {
+    localStorage.setItem('vnhl_site_icon', siteIcon);
+  }, [siteIcon]);
 
   useEffect(() => {
     setAuthenticated(isAuthenticated());
@@ -97,6 +106,8 @@ const Index = () => {
         setRules={setRules}
         champion={champion}
         setChampion={setChampion}
+        siteIcon={siteIcon}
+        setSiteIcon={setSiteIcon}
         onLogout={() => {
           setAuthenticated(false);
           setShowAdmin(false);
@@ -111,7 +122,13 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="text-5xl">🏒</div>
+              <div className="text-5xl flex items-center justify-center w-16 h-16">
+                {siteIcon.startsWith('data:') || siteIcon.startsWith('http') ? (
+                  <img src={siteIcon} alt="VNHL" className="w-full h-full object-contain" />
+                ) : (
+                  <span>{siteIcon}</span>
+                )}
+              </div>
               <div>
                 <h1 className="text-5xl font-oswald font-bold tracking-wider">VNHL</h1>
                 <p className="text-sm text-muted-foreground mt-1">Виртуальная Национальная Хоккейная Лига</p>

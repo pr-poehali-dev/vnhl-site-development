@@ -7,6 +7,7 @@ import MatchesManagement from '@/components/admin/MatchesManagement';
 import PlayoffsManagement from '@/components/admin/PlayoffsManagement';
 import RulesManagement from '@/components/admin/RulesManagement';
 import ChampionManagement from '@/components/admin/ChampionManagement';
+import SiteSettings from '@/components/admin/SiteSettings';
 
 interface Team {
   id: number;
@@ -55,6 +56,8 @@ interface AdminPanelProps {
   setRules: (rules: Rule[]) => void;
   champion: Champion;
   setChampion: (champion: Champion) => void;
+  siteIcon: string;
+  setSiteIcon: (icon: string) => void;
   onLogout: () => void;
 }
 
@@ -69,6 +72,8 @@ const AdminPanel = ({
   setRules,
   champion,
   setChampion,
+  siteIcon,
+  setSiteIcon,
   onLogout 
 }: AdminPanelProps) => {
   const [activeTab, setActiveTab] = useState('teams');
@@ -84,13 +89,18 @@ const AdminPanel = ({
 
       <main className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-5 mb-8">
+          <TabsList className="grid w-full grid-cols-6 mb-8">
+            <TabsTrigger value="settings">Настройки</TabsTrigger>
             <TabsTrigger value="teams">Команды</TabsTrigger>
             <TabsTrigger value="matches">Матчи</TabsTrigger>
             <TabsTrigger value="playoffs">Плей-офф</TabsTrigger>
             <TabsTrigger value="rules">Правила</TabsTrigger>
             <TabsTrigger value="champion">Чемпион</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="settings">
+            <SiteSettings siteIcon={siteIcon} setSiteIcon={setSiteIcon} />
+          </TabsContent>
 
           <TabsContent value="teams">
             <TeamsManagement teams={teams} setTeams={setTeams} />
