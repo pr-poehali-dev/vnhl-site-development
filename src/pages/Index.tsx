@@ -81,7 +81,7 @@ const Index = () => {
   }, []);
 
   if (showAdmin && !authenticated) {
-    return <AdminLogin onSuccess={() => setAuthenticated(true)} />;
+    return <AdminLogin onSuccess={() => setAuthenticated(true)} onBack={() => setShowAdmin(false)} />;
   }
 
   if (showAdmin && authenticated) {

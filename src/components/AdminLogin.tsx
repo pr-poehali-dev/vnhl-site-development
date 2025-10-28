@@ -7,9 +7,10 @@ import Icon from '@/components/ui/icon';
 
 interface AdminLoginProps {
   onSuccess: () => void;
+  onBack?: () => void;
 }
 
-const AdminLogin = ({ onSuccess }: AdminLoginProps) => {
+const AdminLogin = ({ onSuccess, onBack }: AdminLoginProps) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -55,9 +56,17 @@ const AdminLogin = ({ onSuccess }: AdminLoginProps) => {
                 <p className="text-destructive text-sm mt-2">{error}</p>
               )}
             </div>
-            <Button type="submit" className="w-full text-lg" disabled={loading}>
-              {loading ? 'Проверка...' : 'Войти'}
-            </Button>
+            <div className="flex gap-3">
+              {onBack && (
+                <Button type="button" variant="outline" onClick={onBack} className="flex-1 text-lg">
+                  <Icon name="ArrowLeft" className="mr-2" size={20} />
+                  Назад
+                </Button>
+              )}
+              <Button type="submit" className={`text-lg ${onBack ? 'flex-1' : 'w-full'}`} disabled={loading}>
+                {loading ? 'Проверка...' : 'Войти'}
+              </Button>
+            </div>
           </form>
         </CardContent>
       </Card>
