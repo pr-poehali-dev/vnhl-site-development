@@ -43,10 +43,10 @@ const PlayoffsTab = ({ playoffBracket }: PlayoffsTabProps) => {
     <div className="space-y-8">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl font-oswald">1/8 финала</CardTitle>
+          <CardTitle className="text-2xl font-oswald">1/6 финала</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {playoffBracket.roundOf16.map(renderMatch)}
           </div>
         </CardContent>
@@ -57,7 +57,7 @@ const PlayoffsTab = ({ playoffBracket }: PlayoffsTabProps) => {
           <CardTitle className="text-2xl font-oswald">1/4 финала</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {playoffBracket.quarterFinals.map(renderMatch)}
           </div>
         </CardContent>

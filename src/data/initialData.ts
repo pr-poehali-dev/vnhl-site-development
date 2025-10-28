@@ -24,26 +24,23 @@ export const initialMatches = [
 
 export const initialPlayoffBracket = {
   roundOf16: [
-    { id: 1, team1: 'Команда 1', team2: 'Команда 16', score1: null, score2: null },
-    { id: 2, team1: 'Команда 8', team2: 'Команда 9', score1: null, score2: null },
-    { id: 3, team1: 'Команда 4', team2: 'Команда 13', score1: null, score2: null },
-    { id: 4, team1: 'Команда 5', team2: 'Команда 12', score1: null, score2: null },
-    { id: 5, team1: 'Команда 2', team2: 'Команда 15', score1: null, score2: null },
-    { id: 6, team1: 'Команда 7', team2: 'Команда 10', score1: null, score2: null },
-    { id: 7, team1: 'Команда 3', team2: 'Команда 14', score1: null, score2: null },
-    { id: 8, team1: 'Команда 6', team2: 'Команда 11', score1: null, score2: null },
+    { id: 1, team1: 'Команда 1', team2: 'Команда 12', score1: null, score2: null },
+    { id: 2, team1: 'Команда 6', team2: 'Команда 7', score1: null, score2: null },
+    { id: 3, team1: 'Команда 3', team2: 'Команда 10', score1: null, score2: null },
+    { id: 4, team1: 'Команда 4', team2: 'Команда 9', score1: null, score2: null },
+    { id: 5, team1: 'Команда 5', team2: 'Команда 8', score1: null, score2: null },
+    { id: 6, team1: 'Команда 2', team2: 'Команда 11', score1: null, score2: null },
   ],
   quarterFinals: [
-    { id: 9, team1: 'Победитель 1/8 №1', team2: 'Победитель 1/8 №2', score1: null, score2: null },
-    { id: 10, team1: 'Победитель 1/8 №3', team2: 'Победитель 1/8 №4', score1: null, score2: null },
-    { id: 11, team1: 'Победитель 1/8 №5', team2: 'Победитель 1/8 №6', score1: null, score2: null },
-    { id: 12, team1: 'Победитель 1/8 №7', team2: 'Победитель 1/8 №8', score1: null, score2: null },
+    { id: 7, team1: 'Победитель 1/6 №1', team2: 'Победитель 1/6 №2', score1: null, score2: null },
+    { id: 8, team1: 'Победитель 1/6 №3', team2: 'Победитель 1/6 №4', score1: null, score2: null },
+    { id: 9, team1: 'Победитель 1/6 №5', team2: 'Победитель 1/6 №6', score1: null, score2: null },
   ],
   semiFinals: [
-    { id: 13, team1: 'Победитель 1/4 №1', team2: 'Победитель 1/4 №2', score1: null, score2: null },
-    { id: 14, team1: 'Победитель 1/4 №3', team2: 'Победитель 1/4 №4', score1: null, score2: null },
+    { id: 10, team1: 'Победитель 1/4 №1', team2: 'Победитель 1/4 №2', score1: null, score2: null },
+    { id: 11, team1: 'Победитель 1/4 №3', team2: 'TBD', score1: null, score2: null },
   ],
-  final: { id: 15, team1: 'Победитель 1/2 №1', team2: 'Победитель 1/2 №2', score1: null, score2: null },
+  final: { id: 12, team1: 'Победитель 1/2 №1', team2: 'Победитель 1/2 №2', score1: null, score2: null },
 };
 
 export const initialRules = [

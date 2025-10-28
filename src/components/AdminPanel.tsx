@@ -417,7 +417,7 @@ const AdminPanel = ({
             <div className="space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>1/8 финала</CardTitle>
+                  <CardTitle>1/6 финала</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
