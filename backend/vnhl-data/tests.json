@@ -1,0 +1,30 @@
+{
+  "tests": [
+    {
+      "name": "Get teams data",
+      "method": "GET",
+      "path": "/?path=teams",
+      "expectedStatus": 200,
+      "expectedBody": [],
+      "bodyMatcher": "type"
+    },
+    {
+      "name": "Get matches data",
+      "method": "GET",
+      "path": "/?path=matches",
+      "expectedStatus": 200,
+      "expectedBody": [],
+      "bodyMatcher": "type"
+    },
+    {
+      "name": "Get site settings",
+      "method": "GET",
+      "path": "/?path=settings",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "site_icon": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

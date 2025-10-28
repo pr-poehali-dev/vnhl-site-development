@@ -13,6 +13,7 @@ import RulesTab from '@/components/RulesTab';
 import { isAuthenticated } from '@/lib/auth';
 import { useTheme } from '@/contexts/ThemeContext';
 import ThemeToggle from '@/components/ThemeToggle';
+import { api } from '@/lib/api';
 import {
   initialTeams,
   initialMatches,
@@ -26,70 +27,81 @@ const Index = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [activeTab, setActiveTab] = useState('standings');
 
-  const [teams, setTeams] = useState(() => {
-    const saved = localStorage.getItem('vnhl_teams');
-    return saved ? JSON.parse(saved) : initialTeams;
-  });
-
-  const [matches, setMatches] = useState(() => {
-    const saved = localStorage.getItem('vnhl_matches');
-    return saved ? JSON.parse(saved) : initialMatches;
-  });
-
-  const [playoffBracket, setPlayoffBracket] = useState(() => {
-    const saved = localStorage.getItem('vnhl_playoffs');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (parsed.roundOf16?.length === 6 && parsed.quarterFinals?.length === 3) {
-        return parsed;
-      }
-    }
-    localStorage.setItem('vnhl_playoffs', JSON.stringify(initialPlayoffBracket));
-    return initialPlayoffBracket;
-  });
-
-  const [rules, setRules] = useState(() => {
-    const saved = localStorage.getItem('vnhl_rules');
-    return saved ? JSON.parse(saved) : initialRules;
-  });
-
-  const [champion, setChampion] = useState(() => {
-    const saved = localStorage.getItem('vnhl_champion');
-    return saved ? JSON.parse(saved) : initialChampion;
-  });
-
-  const [siteIcon, setSiteIcon] = useState(() => {
-    const saved = localStorage.getItem('vnhl_site_icon');
-    return saved || '🏒';
-  });
-
-  useEffect(() => {
-    localStorage.setItem('vnhl_teams', JSON.stringify(teams));
-  }, [teams]);
-
-  useEffect(() => {
-    localStorage.setItem('vnhl_matches', JSON.stringify(matches));
-  }, [matches]);
-
-  useEffect(() => {
-    localStorage.setItem('vnhl_playoffs', JSON.stringify(playoffBracket));
-  }, [playoffBracket]);
-
-  useEffect(() => {
-    localStorage.setItem('vnhl_rules', JSON.stringify(rules));
-  }, [rules]);
-
-  useEffect(() => {
-    localStorage.setItem('vnhl_champion', JSON.stringify(champion));
-  }, [champion]);
-
-  useEffect(() => {
-    localStorage.setItem('vnhl_site_icon', siteIcon);
-  }, [siteIcon]);
+  const [teams, setTeams] = useState(initialTeams);
+  const [matches, setMatches] = useState(initialMatches);
+  const [playoffBracket, setPlayoffBracket] = useState(initialPlayoffBracket);
+  const [rules, setRules] = useState(initialRules);
+  const [champion, setChampion] = useState(initialChampion);
+  const [siteIcon, setSiteIcon] = useState('🏒');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setAuthenticated(isAuthenticated());
+    loadData();
   }, []);
+
+  const loadData = async () => {
+    try {
+      const [teamsData, matchesData, playoffsData, rulesData, championData, settingsData] = await Promise.all([
+        api.getTeams(),
+        api.getMatches(),
+        api.getPlayoffs(),
+        api.getRules(),
+        api.getChampion(),
+        api.getSettings()
+      ]);
+
+      if (teamsData.length > 0) setTeams(teamsData);
+      if (matchesData.length > 0) setMatches(matchesData);
+      if (playoffsData.roundOf16) setPlayoffBracket(playoffsData);
+      if (rulesData.length > 0) setRules(rulesData);
+      if (championData.team_name) {
+        setChampion({
+          teamName: championData.team_name,
+          logo: championData.logo,
+          season: championData.season,
+          wins: championData.wins,
+          losses: championData.losses,
+          mvp: championData.mvp
+        });
+      }
+      if (settingsData.site_icon) setSiteIcon(settingsData.site_icon);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveTeamsToDb = async (newTeams: any[]) => {
+    setTeams(newTeams);
+    await api.saveTeams(newTeams);
+  };
+
+  const saveMatchesToDb = async (newMatches: any[]) => {
+    setMatches(newMatches);
+    await api.saveMatches(newMatches);
+  };
+
+  const savePlayoffsToDb = async (newBracket: any) => {
+    setPlayoffBracket(newBracket);
+    await api.savePlayoffs(newBracket);
+  };
+
+  const saveRulesToDb = async (newRules: any[]) => {
+    setRules(newRules);
+    await api.saveRules(newRules);
+  };
+
+  const saveChampionToDb = async (newChampion: any) => {
+    setChampion(newChampion);
+    await api.saveChampion(newChampion);
+  };
+
+  const saveSiteIconToDb = async (newIcon: string) => {
+    setSiteIcon(newIcon);
+    await api.saveSettings({ siteIcon: newIcon });
+  };
 
   if (showAdmin && !authenticated) {
     return <AdminLogin onSuccess={() => setAuthenticated(true)} onBack={() => setShowAdmin(false)} />;
@@ -99,22 +111,30 @@ const Index = () => {
     return (
       <AdminPanel
         teams={teams}
-        setTeams={setTeams}
+        setTeams={saveTeamsToDb}
         matches={matches}
-        setMatches={setMatches}
+        setMatches={saveMatchesToDb}
         playoffBracket={playoffBracket}
-        setPlayoffBracket={setPlayoffBracket}
+        setPlayoffBracket={savePlayoffsToDb}
         rules={rules}
-        setRules={setRules}
+        setRules={saveRulesToDb}
         champion={champion}
-        setChampion={setChampion}
+        setChampion={saveChampionToDb}
         siteIcon={siteIcon}
-        setSiteIcon={setSiteIcon}
+        setSiteIcon={saveSiteIconToDb}
         onLogout={() => {
           setAuthenticated(false);
           setShowAdmin(false);
         }}
       />
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-2xl">Загрузка...</div>
+      </div>
     );
   }
 
