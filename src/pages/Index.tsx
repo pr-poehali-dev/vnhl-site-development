@@ -36,7 +36,14 @@ const Index = () => {
 
   const [playoffBracket, setPlayoffBracket] = useState(() => {
     const saved = localStorage.getItem('vnhl_playoffs');
-    return saved ? JSON.parse(saved) : initialPlayoffBracket;
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.roundOf16?.length === 6 && parsed.quarterFinals?.length === 3) {
+        return parsed;
+      }
+    }
+    localStorage.setItem('vnhl_playoffs', JSON.stringify(initialPlayoffBracket));
+    return initialPlayoffBracket;
   });
 
   const [rules, setRules] = useState(() => {
